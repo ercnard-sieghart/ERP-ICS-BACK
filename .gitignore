@@ -1,28 +1,6 @@
 # Ignore node_modules, logs, OS files, and common IDE files
-node_modules/
-*.log
-*.tmp
-*.swp
-.DS_Store
-Thumbs.db
+# Ignorar pastas de IDEs
 .vscode/
 .idea/
-.env
-.env.*
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.db
-*.sqlite3
-*.bak
-*.backup
-*.tgz
-*.tar.gz
-*.zip
-*.coverage
-coverage/
-dist/
-build/
-core/*.tlpp
-webservices/*.prw
+# Ignorar pasta de testes
+teste/
