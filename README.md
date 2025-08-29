@@ -1,7 +1,6 @@
 
 # ERP-ICS-BACK
 
-<<<<<<< 2-implementação-de-autenticação-via-webservice
 Este repositório contém o backend do sistema ERP ICS.
 
 ## Estrutura
@@ -45,3 +44,4 @@ Este repositório contém o back-end da solução ICS Web, responsável por trat
 
 O back-end é desenvolvido em AdvPL, utilizando padrões RESTful para facilitar a integração com o front-end e outros sistemas.
 >>>>>>> desenv
+
