@@ -24,26 +24,34 @@ Method Token(cUserName, cPassword) Class AUTHGETTOKEN
     Local cType      := ""
     Local cExpires   := ""
     
-
     Aadd(aHeader, "Accept: application/json")
     oRest:setPath(cPath)
 
     If oRest:Post(aHeader)
         jResponse:FromJson(oRest:GetResult())
-
-        If ValType(jResponse) == "J"
+        If oRest:OresponseH:CSTATUSCODE == "200"
             cToken   := jResponse["access_token"]
             cRefresh := jResponse["refresh_token"]
             cScope   := jResponse["scope"]
             cType    := jResponse["token_type"]
             cExpires := jResponse["expires_in"]
-        EndIf
+            cCode    := oRest:OresponseH:CSTATUSCODE
+            cNome    := UsrFullName()
+            cEmail   := UsrRetMail()
+            AAdd(aReturn, cCode)
+            AAdd(aReturn, cToken)
+            AAdd(aReturn, cRefresh)
+            AAdd(aReturn, cScope)
+            AAdd(aReturn, cType)
+            AAdd(aReturn, cExpires)
+            AAdd(aReturn, cNome)
+            AAdd(aReturn, cEmail)
+        Endif            
+    Else
+        cCode  := "401"
+        cMsg    := "Usuário ou senha inválidos."
+        AAdd(aReturn, cCode)
+        AAdd(aReturn, cMsg)
     EndIf
-
-    AAdd(aReturn, cToken)
-    AAdd(aReturn, cRefresh)
-    AAdd(aReturn, cScope)
-    AAdd(aReturn, cType)
-    AAdd(aReturn, cExpires)
 
 Return aReturn
