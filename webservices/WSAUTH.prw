@@ -16,18 +16,18 @@ WSMETHOD POST WSService Login
     Local cPassword := oJsnBody["password"]
     Local aTokens   := {}
     Local oResp     := JsonObject():New()
-    Local lRet      := .T.
     Local cMsg      := "Login realizado com sucesso."
 
     aTokens := authgettoken():Token(cUserName, cPassword)
 
     If aTokens[1] == "400"
         cMsg    := "JSON inválido ou credenciais ausentes."
-        lRet    := .F.
+    Elseif aTokens[1] == "401"
+        nStatus := 401
+        cMsg    := "Usuário ou senha inválidos."
     Elseif aTokens[1] == "403"
         nStatus := 403
         cMsg    := "Acesso negado."
-        lRet    := .F.
     Elseif aTokens[1] == "200"
         cJsonText := '{' + CRLF
         cJsonText += '  "access_token": "' + aTokens[1] + '",' + CRLF
@@ -45,10 +45,9 @@ WSMETHOD POST WSService Login
     If aTokens[1] == "200"
         ::SetResponse(cJsonText)
     Else
-        oResp["success"] := lRet
         oResp["message"] := cMsg
         ::SetResponse(oResp:ToJson())
     EndIf
-    ::SetStatus(aTokens[1])
+    ::SetStatus(val(aTokens[1]))
 
-Return lRet
+Return 
