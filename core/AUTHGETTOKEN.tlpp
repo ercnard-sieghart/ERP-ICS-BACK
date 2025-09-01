@@ -1,0 +1,58 @@
+#Include "TOTVS.ch"
+#Include 'Protheus.ch'
+#Include 'FWBrowse.ch'
+#Include 'TbiConn.ch'
+#Include 'RWMAKE.ch'
+#Include 'topconn.ch'
+
+Class AUTHGETTOKEN
+
+    Static Method Token(cUserName, cPassword)
+
+EndClass
+
+Method Token(cUserName, cPassword) Class AUTHGETTOKEN
+	Local cUrl       := "http://localhost:8181/rest"
+    Local cPath      := "/api/oauth2/v1/token?grant_type=password&username=" + Escape(cUserName) + "&password=" + Escape(cPassword)
+    Local oRest      := FWRest():New(cUrl)
+    Local aHeader    := {}
+    Local jResponse  := JsonObject():New()
+    Local cToken     := ""
+    Local cRefresh   := ""
+    Local aReturn    := {}
+    Local cScope     := ""
+    Local cType      := ""
+    Local cExpires   := ""
+    
+    Aadd(aHeader, "Accept: application/json")
+    oRest:setPath(cPath)
+
+    If oRest:Post(aHeader)
+        jResponse:FromJson(oRest:GetResult())
+        If oRest:OresponseH:CSTATUSCODE == "201"
+    
+            cToken   := jResponse["access_token"]
+            cRefresh := jResponse["refresh_token"]
+            cScope   := jResponse["scope"]
+            cType    := jResponse["token_type"]
+            cExpires := jResponse["expires_in"]
+            cCode    := oRest:OresponseH:CSTATUSCODE
+            cNome    := UsrFullName()
+            cEmail   := UsrRetMail()
+            AAdd(aReturn, cCode)
+            AAdd(aReturn, cToken)
+            AAdd(aReturn, cRefresh)
+            AAdd(aReturn, cScope)
+            AAdd(aReturn, cType)
+            AAdd(aReturn, cExpires)
+            AAdd(aReturn, cNome)
+            AAdd(aReturn, cEmail)
+        Endif            
+    Else
+        cCode  := "401"
+        cMsg    := "Usuário ou senha inválidos."
+        AAdd(aReturn, cCode)
+        AAdd(aReturn, cMsg)
+    EndIf
+
+Return aReturn

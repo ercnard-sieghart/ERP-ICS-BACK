@@ -1,0 +1,6 @@
+# Ignorar pastas de IDEs
+.vscode/
+.idea/
+
+# Ignorar pasta de testes
+teste/
