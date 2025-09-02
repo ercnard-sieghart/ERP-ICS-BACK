@@ -48,7 +48,7 @@ method AuthGetToken(cUserName, cPassword) class AuthService
 		Endif
 	Else
 		cCode  := "401"
-		cMsg    := "Usu√°rio ou senha inv√°lidos."
+		cMsg    := "Usu·rio ou senha inv·lidos."
 		AAdd(aReturn, cCode)
 		AAdd(aReturn, cMsg)
 	EndIf

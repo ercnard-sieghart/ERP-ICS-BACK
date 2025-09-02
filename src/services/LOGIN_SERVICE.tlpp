@@ -14,6 +14,8 @@ method Login(cContent) class LoginService
 	Local oBody := JsonObject():New()
 	Local oResponse := JsonObject():New()
 	Local aTokens := {}
+	Local aResponse := {}
+	Local cMsg := "Login realizado com sucesso."
 
 	oBody:FromJson(cContent)
 
@@ -21,10 +23,10 @@ method Login(cContent) class LoginService
 
 	do case
 	case aTokens[1] == '400'
-		oResponse["message"] := "JSON inválido ou credenciais ausentes."
+		oResponse["message"] := "JSON invalido ou credenciais ausentes."
 		oResponse["status"] := 400
 	case aTokens[1] == '401'
-		oResponse["message"] := "Usuário ou senha inválidos."
+		oResponse["message"] := "Usuario ou senha invalidos."
 		oResponse["status"] := 401
 	case aTokens[1] == "403"
 		oResponse["message"] := "Acesso negado."
@@ -36,13 +38,15 @@ method Login(cContent) class LoginService
 		cJsonText += '  "refresh_token": "' + aTokens[3] + '",' + CRLF
 		cJsonText += '  "scope": "' + aTokens[4] + '",' + CRLF
 		cJsonText += '  "token_type": "' + aTokens[5] + '",' + CRLF
-		cJsonText += '  "expires_in": ' + AllTrim(Str(aTokens[6])) + ',' + CRLF
+		cJsonText += '  "expires_in": ' + SecsToTime(aTokens[6]) + ',' + CRLF
 		cJsonText += '  "success": true,' + CRLF
 		cJsonText += '  "message": "' + cMsg + '",' + CRLF
 		cJsonText += '  "name": "' + aTokens[7] + '",' + CRLF
 		cJsonText += '  "email": "' + aTokens[8] + '"' + CRLF
 		cJsonText += '}' + CRLF
-		oResponse["message"] := cJsonText
 	endcase
 
-return oResponse:ToJson()
+	AAdd(aResponse, oResponse["status"])
+	AAdd(aResponse, cJsonText)
+
+return aResponse

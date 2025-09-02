@@ -11,7 +11,7 @@ WSMETHOD POST WSRESTFUL Login
     Local cContent := Self:GetContent()
     Local aResponse := LoginService():Login(cContent)
 
-    ::SetStatus(aResponse["status"])
-    ::SetResponse(aResponse["message"])
+    ::SetStatus(aResponse[1])
+    ::SetResponse(aResponse[2])
 Return
 
