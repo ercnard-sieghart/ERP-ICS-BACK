@@ -1,0 +1,48 @@
+#include "protheus.ch"
+#include "totvs.ch"
+#include "FWBrowse.ch"
+#include "TbiConn.ch"
+#include "topconn.ch"
+#include "rwmake.ch"
+
+
+class LoginService
+	static method Login(cContent)
+endclass
+
+method Login(cContent) class LoginService
+	Local oBody := JsonObject():New()
+	Local oResponse := JsonObject():New()
+	Local aTokens := {}
+
+	oBody:FromJson(cContent)
+
+	aTokens := AuthService():AuthGetToken(oBody["username"], oBody["password"])
+
+	do case
+	case aTokens[1] == '400'
+		oResponse["message"] := "JSON inválido ou credenciais ausentes."
+		oResponse["status"] := 400
+	case aTokens[1] == '401'
+		oResponse["message"] := "Usuário ou senha inválidos."
+		oResponse["status"] := 401
+	case aTokens[1] == "403"
+		oResponse["message"] := "Acesso negado."
+		oResponse["status"] := 403
+	case aTokens[1] == '201'
+		oResponse["status"] := 200
+		cJsonText := '{' + CRLF
+		cJsonText += '  "access_token": "' + aTokens[2] + '",' + CRLF
+		cJsonText += '  "refresh_token": "' + aTokens[3] + '",' + CRLF
+		cJsonText += '  "scope": "' + aTokens[4] + '",' + CRLF
+		cJsonText += '  "token_type": "' + aTokens[5] + '",' + CRLF
+		cJsonText += '  "expires_in": ' + AllTrim(Str(aTokens[6])) + ',' + CRLF
+		cJsonText += '  "success": true,' + CRLF
+		cJsonText += '  "message": "' + cMsg + '",' + CRLF
+		cJsonText += '  "name": "' + aTokens[7] + '",' + CRLF
+		cJsonText += '  "email": "' + aTokens[8] + '"' + CRLF
+		cJsonText += '}' + CRLF
+		oResponse["message"] := cJsonText
+	endcase
+
+return oResponse:ToJson()
