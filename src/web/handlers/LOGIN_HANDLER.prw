@@ -3,8 +3,8 @@
 #include "topconn.ch"
 #include "tbiconn.ch"
 
-WSRESTFUL Login Description "Login"
-    WSMETHOD POST Description "Valida os dados de login no portal" WSSYNTAX "/login"
+WSRESTFUL Login DESCRIPTION "Login"
+    WSMETHOD POST DESCRIPTION "Valida os dados de login no portal" WSSYNTAX "/login"
 End WSRESTFUL
 
 WSMETHOD POST WSRESTFUL Login
@@ -14,3 +14,4 @@ WSMETHOD POST WSRESTFUL Login
     ::SetStatus(aResponse["status"])
     ::SetResponse(aResponse["message"])
 Return
+
