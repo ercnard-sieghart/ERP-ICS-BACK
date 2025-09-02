@@ -1,0 +1,80 @@
+#include "protheus.ch"
+#include "msobject.ch"
+#include "totvs.framework.treports.integratedprovider.th"
+
+namespace custom.katrium.smartview
+
+/*******************************************************************************************/
+/** Objeto de negocia de (Extrato Bancario)
+/*******************************************************************************************/
+@totvsFrameworkTReportsIntegratedProvider(active=.T., team="SIGAFIN", name="FINANCEIRO ", country="ALL", initialRelease="12.1.2310")
+class TReportsBO_ExtratoBancario from totvs.framework.treports.integratedprovider.IntegratedProvider
+public method new() as object
+public method getData() as object
+public method getSchema() as object
+endclass
+
+method new() class TReportsBO_ExtratoBancario
+_Super:new()
+
+//Define a Área
+self:appendArea("Financeiro")
+
+//Define o nome do Objeto de Negócio
+self:setDisplayName("Extrato Bancário")
+
+//Define a descrição do Objeto de Negócio
+self:setDescription("Avaliacoes Extrato Bancário")
+
+return self
+
+
+/*********************************************************************************************/
+/** Implementa a lógica para retornar os dados do Objeto de Negócio
+/*********************************************************************************************/
+method getData() as object class TReportsBO_DadosMedicos
+    
+    Local cQuery as character
+    Local empresaMedico := Posicione ( "NKV", 1, xFilial("NKV")+RetCodUsr(), "NKV_LAYOUT")
+
+    //Define a quantidade máxima por página (Default 100)
+    self:setPageSize(200)
+
+    //Define a query do Objeto de Negócio
+    //cQuery := "SELECT #QueryFields# FROM " + RetSQLName("SB1") + " WHERE #QueryWhere#"
+    cQuery := " SELECT COLABORADOR, EMPRESA, EMPRESA_ID, CONDICAO, GLICOSE, PRESSAO, DATA, HORA, PT, RELATO_DE_ENFERMAGEM, MEDICAMENTO " 
+    cQuery += " FROM BI.SV_DADOS_MEDICOS   "
+    If empresaMedico <> "****"    
+        cQuery += " WHERE EMPRESA_ID = '" + empresaMedico + "' "
+    EndIf    
+    
+    Conout ( cQuery )
+    Conout ( "empresaMedico = " + empresaMedico )
+    self:setQuery(cQuery)
+
+    //Define o campo de ordenação da query
+    //self:setOrder("ZQD_DATA")
+
+    //Define o where da query
+    //self:setWhere("RB0.D_e_L_E_T_ (+) <> '*' AND RB0_EMPRES (+) = ZAB_EMPRES        ")
+
+return self:oData
+
+
+/*********************************************************************************************/
+/** Schema do objeto de negócio
+/*********************************************************************************************/
+method getSchema() as object class TReportsBO_DadosMedicos
+
+self:addProperty("Pessoa", "Pessoa", "string", "Pessoa", "COLABORADOR")
+self:addProperty("Empresa", "Empresa", "string", "Empresa", "EMPRESA")
+self:addProperty("Descricao", "Descricao", "string", "Descricao","CONDICAO")
+self:addProperty("Glicose", "Glicose", "string", "Glicose","GLICOSE")
+self:addProperty("Pressao", "Pressao", "string", "Pressao","PRESSAO")
+self:addProperty("Dia", "Dia", "date", "Revisao","DATA")
+self:addProperty("Hora", "Hora", "string", "Hora","HORA")
+self:addProperty("PT", "PT", "string", "PT","PT")
+self:addProperty("Relato", "Relato", "string", "Relato","RELATO_DE_ENFERMAGEM")
+self:addProperty("Medicamento", "Medicamento", "string", "Medicamento","MEDICAMENTO")
+
+return self:oSchema
