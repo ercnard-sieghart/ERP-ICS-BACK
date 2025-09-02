@@ -21,10 +21,10 @@ method Login(cContent) class LoginService
 
 	do case
 	case aTokens[1] == '400'
-		oResponse["message"] := "JSON inv·lido ou credenciais ausentes."
+		oResponse["message"] := "JSON inv√°lido ou credenciais ausentes."
 		oResponse["status"] := 400
 	case aTokens[1] == '401'
-		oResponse["message"] := "Usu·rio ou senha inv·lidos."
+		oResponse["message"] := "Usu√°rio ou senha inv√°lidos."
 		oResponse["status"] := 401
 	case aTokens[1] == "403"
 		oResponse["message"] := "Acesso negado."
