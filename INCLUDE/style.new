@@ -1,0 +1,265 @@
+///ccs Tipografia			
+#define STYLE0000 "QWidget {   		font-family: 'FW Microsiga' } "+;
+			"QWidget {				font-size: 8px } "+;
+			"QWidget {				font-style: bold } "+;			
+			"QWidget {	 			border-style: solid } "+;
+			"QWidget {				border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"QWidget {				border-width: 4px }"+;
+			"QPushButton { 			color: #bdbdbd } "+;
+			"QPushButton { 			border-style: solid } "+;
+			"QPushButton {			border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"QPushButton {			border-width: 4px }"+;
+			"QScrollBar { 			border-style: solid } "+;
+			"QScrollBar {			border-image: url(C:/lib912/Resources/style/DefaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"QScrollBar {			border-width: 4px }"+;
+			"QScrollBar {			background-color: black }"+;
+			"Q3Table {				border-style: solid } "+;
+			"Q3Table {				border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"Q3Table {				border-width: 4px }"+;
+			"QTableWidget {			border-style: solid } "+;
+			"QTableWidget {			border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"QTableWidget {			border-width: 4px }"+;
+			"QProgressBar { 		border-style: solid } "+;
+			"QProgressBar {			border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"QProgressBar {			border-width: 4px }"+;
+			"QCalendarWidget { 		border-style: solid } "+;
+			"QCalendarWidget {		border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"QCalendarWidget {		border-width: 4px }"+;
+			"QPushButton:hover { 	color: #000000 } "+;
+			"QPushButton:hover { 	border-style: solid } "+;
+			"QPushButton:hover {	border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"QPushButton:hover {	border-width: 4px }"+;
+			"QPushButton:focus { 	color: #000000 } "+;
+			"QPushButton:focus { 	border-style: solid } "+;
+			"QPushButton:focus {	border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"QPushButton:focus {	border-width: 4px }"+;
+			"QPushButton:pressed { 	color: #000000 } "+;
+			"QPushButton:pressed { 	border-style: solid } "+;
+			"QPushButton:pressed {	border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"QPushButton:pressed {	border-width: 4px }"			
+
+///ccs Button
+#define STYLE0001 "QPushButton { 	background-color: white } "+;
+			"QPushButton { 			color: #bdbdbd } "+;
+			"QPushButton { 			border-style: solid } "+;
+			"QPushButton {			border-image: url(C:/lib912/Resources/style/DarkBorderWhite.png) 9 9 9 9 stretch }"+;		
+			"QPushButton {			border-width: 9px }"+;
+			"QPushButton:hover { 	color: #000000 } "+;
+			"QPushButton:hover { 	border-style: solid } "+;
+			"QPushButton:hover {	border-image: url(C:/lib912/Resources/style/DarkBorderWhiteFocus.png) 9 9 9 9 stretch }"+;		
+			"QPushButton:hover {	border-width: 9px }"+;
+			"QPushButton:focus { 	color: #000000 } "+;
+			"QPushButton:focus { 	border-style: solid } "+;
+			"QPushButton:focus {	border-image: url(C:/lib912/Resources/style/DarkBorderWhiteFocus.png) 9 9 9 9 stretch }"+;		
+			"QPushButton:focus {	border-width: 9px }"+;
+			"QPushButton:pressed { 	color: #ffffff } "+;
+			"QPushButton:pressed { 	border-style: solid } "+;
+			"QPushButton:pressed {	border-image: url(C:/lib912/Resources/style/DarkBorderBlackFocus.png) 9 9 9 9 stretch }"+;		
+			"QPushButton:pressed {	border-width: 9px }"						
+
+///ccs Get			
+#define STYLE0002 "QLineEdit {		color: #ffffff } "+;
+			"QLineEdit {			font-family: 'FW Microsiga' } "+;
+			"QLineEdit {			font-size: 8px } "+;
+			"QLineEdit {			font-style: bold } "+;			
+			"QLineEdit {			border-style: solid } "+;
+			"QLineEdit {			border-image: url(C:/lib912/Resources/style/DarkBorderBlack.png) 9 9 9 9 stretch }"+;		
+			"QLineEdit {			border-width: 9px }"+;
+			"QLineEdit:hover { 		color: #ffffff } "+;
+			"QLineEdit:hover { 		border-style: solid } "+;
+			"QLineEdit:hover {		border-image: url(C:/lib912/Resources/style/DarkBorderBlackOver.png) 9 9 9 9 stretch }"+;		
+			"QLineEdit:hover {		border-width: 9px }"+;
+			"QLineEdit:focus { 		color: #ffffff } "+;
+			"QLineEdit:focus { 		border-style: solid } "+;
+			"QLineEdit:focus {		border-image: url(C:/lib912/Resources/style/DarkBorderBlackFocus.png) 9 9 9 9 stretch }"+;		
+			"QLineEdit:focus {		border-width: 9px }"
+			
+///ccs Say			
+#define STYLE0003 "QLabel {			color: #000000 } "+;
+			"QLabel {				font-family: 'FW Microsiga' } "+;
+			"QLabel { 				font-size: 8px } "
+
+
+///ccs GetSearch 			
+#define STYLE0004 "QLineEdit {		color: #9692a9 } "+;
+			"QLineEdit {	   		font-family: 'FW Microsiga' } "+;
+			"QLineEdit {			font-size: 8px } "+;
+			"QLineEdit { 			font-style: bold } "+;
+			"QLineEdit {			border-style: solid } "+;
+			"QLineEdit {			border-image: url(C:/lib912/Resources/style/VistaBgBlack.png) 8 8 8 8 stretch }"+;		
+			"QLineEdit {			border-width: 8px }"
+
+///ccs MenuTop 			
+#define STYLE0005 "QMenuBar {		color: #ffffff } "+;
+			"QWidget {				border-style: solid } "+;
+			"QWidget {				border-image: url(C:/lib912/Resources/style/VistaBgBlack.png) 8 8 8 8 stretch }"+;		
+			"QWidget {				border-width: 8px }"+;
+			"QMenuBar {				font-size: 10px } "+;
+			"QMenuBar { 	   		font-style: bold } "+;
+			"QMenuBar {	   			font-family: 'FW Microsiga' } "+;
+			"QMenuBar {				border-image: url(C:/lib912/Resources/style/VistaBgBlack.png) 8 8 8 8 stretch }"+;		
+			"QMenuBar {				border-width: 8px }"+;		
+			"QMenuBar {				padding: 2px }"+;
+			"QMenu {				font-size: 8px } "+;
+			"QMenu { 	 	   		font-style: bold } "+;
+			"QMenu {	   			background-color: #ffffff } "+;
+			"QMenu {				color: #000000; } "+;
+			"QMenu {	 	 		border-style: solid } "+;
+			"QMenu {				border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;
+			"QMenu {	 	 		border-style: solid } "+;
+			"QMenu {		 		border-width: 4px } "+;
+			"QToolBar {				font-size: 8px } "+;
+			"QToolBar {	 	   		font-style: bold } "+;
+			"QToolBar {	   			background-color: #ffffff } "+;
+			"QToolBar {				color: #000000 } "+;
+			"QToolBar { 	 		border-style: solid } "+;
+			"QToolBar {				border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"QToolBar {				border-width: 4px }"
+
+///ccs ComboBox			
+#define STYLE0006 "QComboBox {		color: #ffffff } "+;
+			"QComboBox {			font-family: 'FW Microsiga' } "+;
+			"QComboBox {			font-size: 8px } "+;
+			"QComboBox {			font-style: bold } "+;			
+			"QComboBox {			border-style: solid } "+;
+			"QComboBox {			border-image: url(C:/lib912/Resources/style/DarkBorderBlack.png) 9 9 9 9 stretch }"+;		
+			"QComboBox {			border-width: 9px }"+;
+			"QWidget { 				border-style: solid } "+;
+			"QWidget {				border-image: url(C:/lib912/Resources/style/DarkBorderBlack.png) 9 9 9 9 stretch }"+;
+			"QWidget { 				border-style: solid } "+;
+			"QWidget { 				border-width: 9px } "+;
+			"QComboBox:hover { 		color: #ffffff } "+;
+			"QComboBox:hover { 		border-style: solid } "+;
+			"QComboBox:hover {		border-image: url(C:/lib912/Resources/style/DarkBorderBlackOver.png) 9 9 9 9 stretch }"+;		
+			"QComboBox:hover {		border-width: 9px }"+;
+			"QComboBox:focus { 		color: #ffffff } "+;
+			"QComboBox:focus { 		border-style: solid } "+;
+			"QComboBox:focus {		border-image: url(C:/lib912/Resources/style/DarkBorderBlackFocus.png) 9 9 9 9 stretch }"+;		
+			"QComboBox:focus {		border-width: 9px }"
+			
+///ccs CheckBox			
+#define STYLE0007 "QCheckBox {		color: #000000 } "+;
+			"QCheckBox {			font-family: 'FW Microsiga' } "+;
+			"QCheckBox {	      	background-repeat: repeat-x } "+;
+			"QCheckBox {	      	background-repeat: repeat-y } "+;
+			"QCheckBox {			spacing: 20px }"+;
+			"QCheckBox {			font-size: 8px } "+;
+			"QCheckBox {			font-style: bold } "+;			
+			"QCheckBox {			background-image: url(C:/lib912/Resources/style/IndicatorCheckBox.png)}"+;
+			"QCheckBox:hover { 		background-image: url(C:/lib912/Resources/style/IndicatorCheckBoxOver.png) } "+;
+			"QCheckBox:checked { 	background-image: url(C:/lib912/Resources/style/IndicatorCheckBoxChecked.png) } "+;						
+			"QCheckBox::indicator { image: url(C:/lib912/Resources/style/x.png)}"
+			
+///ccs Split
+#define STYLE0008 "QPushButton { 	background-color: white } "+;
+			"QPushButton { 			color: #bdbdbd } "+;
+			"QPushButton { 			border-style: solid } "+;
+			"QPushButton {			border-image: url(C:/lib912/Resources/style/SplitBorderWhite.png) 2 2 2 2 stretch }"+;		
+			"QPushButton {			border-width: 2px }"+;
+			"QPushButton:hover { 	color: #000000 } "+;
+			"QPushButton:hover { 	border-style: solid } "+;
+			"QPushButton:hover {	border-image: url(C:/lib912/Resources/style/SplitBorderWhiteOver.png) 2 2 2 2 stretch }"+;		
+			"QPushButton:hover {	border-width: 2px }"+;
+			"QPushButton:focus { 	color: #000000 } "+;
+			"QPushButton:focus { 	border-style: solid } "+;
+			"QPushButton:focus {	border-image: url(C:/lib912/Resources/style/SplitBorderWhiteOver.png) 2 2 2 2 stretch }"+;		
+			"QPushButton:focus {	border-width: 2px }"+;
+			"QPushButton:pressed { 	color: #ffffff } "+;
+			"QPushButton:pressed { 	border-style: solid } "+;
+			"QPushButton:pressed {	border-image: url(C:/lib912/Resources/style/SplitBorderWhiteOver.png) 2 2 2 2 stretch }"+;		
+			"QPushButton:pressed {	border-width: 2px }"
+			
+///ccs GetExecute 			
+#define STYLE0009 "QLineEdit {		color: #000000 } "+;
+			"QLineEdit {	   		font-family: 'FW Microsiga' } "+;
+			"QLineEdit {			font-size: 8px } "+;
+			"QLineEdit { 			font-style: bold } "+;
+			"QLineEdit:focus {		color: #000000 } "+;
+			"QLineEdit:focus { 		font-family: 'FW Microsiga' } "+;
+			"QLineEdit:focus {		font-size: 8px } "+;
+			"QLineEdit:focus {		font-style: bold } "+;
+			"QLineEdit {			border-style: solid } "+;
+			"QLineEdit {			border-image: url(C:/lib912/Resources/style/ExecuteBorderWhite.png) 8 8 8 8 stretch }"+;		
+			"QLineEdit {			border-width: 8px }"						
+
+///ccs ButtonCloseWindow
+#define STYLE0010 "QPushButton { 	border-style: solid } "+;
+			"QPushButton {			border-image: url(C:/lib912/Resources/style/DarkBorderWhite.png) 9 9 9 9 stretch }"+;		
+			"QPushButton {			border-width: 9px }"+;
+			"QPushButton:hover { 	color: #000000 } "+;
+			"QPushButton:hover { 	border-style: solid } "+;
+			"QPushButton:hover {	border-image: url(C:/lib912/Resources/style/DarkBorderWhiteFocus.png) 9 9 9 9 stretch }"+;		
+			"QPushButton:hover {	border-width: 9px }"+;
+			"QPushButton:focus { 	color: #000000 } "+;
+			"QPushButton:focus { 	border-style: solid } "+;
+			"QPushButton:focus {	border-image: url(C:/lib912/Resources/style/DarkBorderWhiteFocus.png) 9 9 9 9 stretch }"+;		
+			"QPushButton:focus {	border-width: 9px }"+;
+			"QPushButton:pressed { 	color: #ffffff } "+;
+			"QPushButton:pressed { 	border-style: solid } "+;
+			"QPushButton:pressed {	border-image: url(C:/lib912/Resources/style/DarkBorderBlackFocus.png) 9 9 9 9 stretch }"+;		
+			"QPushButton:pressed {	border-width: 9px }"
+
+///ccs Get			
+#define STYLE0011 "Q3Table {			color: #ffffff } "+;
+			"Q3Table {					font-family: 'FW Microsiga' } "+;
+			"Q3Table {					font-size: 8px } "+;
+			"Q3Table {					font-style: bold } "+;			
+			"Q3Table {					border-style: solid } "+;
+			"Q3Table {					border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"Q3Table {					border-width: 4px }"+;
+			"Q3Header {					border-style: solid } "+;
+			"Q3Header {					border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"Q3Header {					border-width: 4px }"+;
+			"Q3Header > QPushButton {	color: #000000 } "+;
+			"Q3Header > QPushButton {	border-style: solid } "+;
+			"Q3Header > QPushButton {	border-image: url(C:/lib912/Resources/style/defaultBorderWhite.png) 4 4 4 4 stretch }"+;		
+			"Q3Header > QPushButton {	border-width: 4px }"
+
+// Menu Lateral Nivel 01
+#define STYLE0012 "QPushButton {	font-family: 'FW Microsiga' } "+;
+			"QPushButton { 	border-style: solid } "+;
+			"QPushButton {	border-image: url(C:/Documents and Settings/ivanpc/Desktop/NewMenu/Imagens/SepGroup.png) 9 0 0 0 stretch }"+;		
+			"QPushButton {	border-width: 2px }"+;
+			"QPushButton { 	background-color: #F7F7F7 } "+;
+			"QPushButton { 	color: #000000 } "+;
+			"QPushButton:hover { 	background-color: #D7D7D7 } "+;
+			"QPushButton:pressed { 	background-color: #B7B7B7 } "
+			
+// Menu Lateral Nivel 02
+#define STYLE0013 "QPushButton { 	border-style: solid } "+;
+			"QPushButton {	border-image: url(C:/Documents and Settings/ivanpc/Desktop/NewMenu/Imagens/SepItens.png) 9 0 0 0 stretch }"+;		
+			"QPushButton {	border-width: 1px }"+;
+			"QPushButton { 	background-color: #CFCFCF } "+;
+			"QPushButton { 	color: #000000 } "+;
+			"QPushButton:hover { 	background-color: #AFAFAF } "+;
+			"QPushButton:hover { 	color: #FFFFFF } "+;
+			"QPushButton:pressed { 	background-color: #8F8F8F } "+;
+			"QPushButton:pressed { 	color: #FFFFFF } "
+			
+// Menu Lateral Nivel 03
+#define STYLE0014 "QPushButton { 	border-style: solid } "+;
+			"QPushButton {	border-image: url(C:/Documents and Settings/ivanpc/Desktop/NewMenu/Imagens/SepItens.png) 9 0 0 0 stretch }"+;		
+			"QPushButton {	border-width: 1px }"+;
+			"QPushButton { 	background-color: #A7A7A7 } "+;
+			"QPushButton { 	color: #FFFFFF } "+;
+			"QPushButton:hover { 	background-color: #878787 } "+;
+			"QPushButton:pressed { 	background-color: #676767 } "
+			
+// Menu Lateral Nivel 04
+#define STYLE0015 "QPushButton { 	border-style: solid } "+;
+			"QPushButton {	border-image: url(C:/Documents and Settings/ivanpc/Desktop/NewMenu/Imagens/SepItens.png) 9 0 0 0 stretch }"+;		
+			"QPushButton {	border-width: 1px }"+;
+			"QPushButton { 	background-color: #7F7F7F } "+;
+			"QPushButton { 	color: #FFFFFF } "+;
+			"QPushButton:hover { 	background-color: #5F5F5F } "+;
+			"QPushButton:pressed { 	background-color: #3F3F3F } "
+			
+// Menu Lateral Nivel 05
+#define STYLE0016 "QPushButton { 	border-style: solid } "+;
+			"QPushButton {	border-image: url(C:/Documents and Settings/ivanpc/Desktop/NewMenu/Imagens/SepItens.png) 9 0 0 0 stretch }"+;		
+			"QPushButton {	border-width: 1px }"+;
+			"QPushButton { 	background-color: #575757 } "+;
+			"QPushButton { 	color: #FFFFFF } "+;
+			"QPushButton:hover { 	background-color: #373737 } "+;
+			"QPushButton:pressed { 	background-color: #171717 } "
+

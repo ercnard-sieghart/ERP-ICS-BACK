@@ -1,0 +1,161 @@
+0001#STR0001#ALL#Programação  de ordem de serviço
+0007#STR0007#ALL#Não será possível alterar a Programação, pois a Data Início é igual à Data Actual.
+0008#STR0008#ALL#Não será possível eliminar a Programação, pois a Data Início é igual à Data Actual.
+0009#STR0009#ALL#Programação  de o.s.
+0013#STR0013#ALL#Equipa
+0014#STR0014#ALL#Estado
+0017#STR0017#ALL#A Carregar Ferramentas Utilizadas
+0018#STR0018#ALL#A Carregar Artigos Utilizados
+0019#STR0019#ALL#A Carregar Especialidades Utilizadas
+0020#STR0020#ALL#A verificar disponibilidade da mao-de-obra
+0021#STR0021#ALL#Abandonar
+0026#STR0026#ALL#Legenda mao-de-obra
+0030#STR0030#ALL#Mão-de-obra
+0038#STR0038#ALL#De C.custo
+0040#STR0040#ALL#De Estado   
+0045#STR0045#ALL#A filtrar ordens de serviços
+0046#STR0046#ALL#Actualizando calendario...
+0047#STR0047#ALL#A processar...
+0048#STR0048#ALL#Sem o.s. no dia.
+0049#STR0049#ALL#M.d.o. sdist.iciente para realizar
+0050#STR0050#ALL#A carga horaria prevista.
+0051#STR0051#ALL#M.d.o. insdist.iciente para realizar
+0052#STR0052#ALL#Localizar O.s.:
+0053#STR0053#ALL#Ordenar o.s. por:
+0055#STR0055#ALL#Inserir Todos
+0056#STR0056#ALL#Eliminar Todos
+0061#STR0061#ALL#Alterar Estado   
+0063#STR0063#ALL#Visualizar O.s.
+0064#STR0064#ALL#Autorizar 
+0065#STR0065#ALL#Imprimir O.s.
+0066#STR0066#ALL#Criar S.a.
+0067#STR0067#ALL#A criar solicitação  ao armazém...
+0068#STR0068#ALL#Imprimir programação
+0069#STR0069#ALL#A imprimir...
+0070#STR0070#ALL#Imprimir Recursos
+0071#STR0071#ALL#Visualizar S.c.
+0072#STR0072#ALL#Imprimir S.a.
+0073#STR0073#ALL#Detalhar mao-de-obra
+0075#STR0075#ALL#Total técnicos
+0076#STR0076#ALL#Técnicos adicionar is
+0077#STR0077#ALL#Dias Adicionar Is
+0078#STR0078#ALL#Técnicos ausentes
+0085#STR0085#ALL#Qtde Em Stock
+0086#STR0086#ALL#Número  da s.c.
+0087#STR0087#ALL#Número  da s.a.
+0088#STR0088#ALL#Gravando as introduções...
+0089#STR0089#ALL#Excluindo as introduções...
+0090#STR0090#ALL#Confirma a exclusão da programação  de o.s.?
+0092#STR0092#ALL#Existem o.s. que não foram autorizadas. 
+0093#STR0093#ALL#Confirma a gravação  das alterações realizadas nas ordens de serviços?
+0095#STR0095#ALL#Confirma o cancelamento das alterações realizadas nas ordens de serviços?
+0097#STR0097#ALL#Dados da programação
+0099#STR0099#ALL#Planeador
+0101#STR0101#ALL#Data ínicio Prog.
+0104#STR0104#ALL#O campo data fim prog. e obrigatório.
+0105#STR0105#ALL#O campo planeador e obrigatório.
+0107#STR0107#ALL#Do Que A Data Actual  .
+0108#STR0108#ALL#Ja existem o.s. seleccionadas para a programação. confirma novo filtro?
+0110#STR0110#ALL#Campo data fim e obrigatório.
+0112#STR0112#ALL#Que Data Fim
+0113#STR0113#ALL#Ficheiro vazio!
+0114#STR0114#ALL#Deseja filtrar ordens de serviços apenas do dia 
+0115#STR0115#ALL#A ordem de serviço já possui recurso(s) realizado(s), portanto, não será possível alterar a data prevista.
+0116#STR0116#ALL#Aplicar as alterações em todas as o.s. listadas?
+0117#STR0117#ALL#Não tem solicitação  de compra relacionada.
+0118#STR0118#ALL#Detalhes da mao-de-obra
+0123#STR0123#ALL#O.s. autorizada na programação  actual  
+0124#STR0124#ALL#O.s. Autorizada C/ Recursos Realizados
+0125#STR0125#ALL#O.s. Autorizada S/ Recursos Realizados
+0126#STR0126#ALL#O.s. Pendente
+0127#STR0127#ALL#Legenda da mao-de-obra
+0128#STR0128#ALL#Mao-de-obra alocada abaixo de 90%
+0129#STR0129#ALL#Mao-de-obra alocada de 90% a 100%
+0130#STR0130#ALL#Mao-de-obra insdist.iciente
+0131#STR0131#ALL#Sem O.s. Para A Especialidade
+0132#STR0132#ALL#Mao-de-obra insdist.iciente para realizar esta programação. confirma a autorização?
+0133#STR0133#ALL#A ordem de serviço já possui recurso(s) realizado(s), portanto, a data prevista continuara a mesma.
+0134#STR0134#ALL#Autorizar ordens de serviços
+0136#STR0136#ALL#A data prevista deve estar no período  da programação.
+0137#STR0137#ALL#Não existem recursos do tipo mao-de-obra/especialidade para a ordem de serviço seleccionada.
+0138#STR0138#ALL#Mao-de-obra da ordem de serviço
+0139#STR0139#ALL#Ordem de serviço
+0145#STR0145#ALL#Listagem  da programação  de o.s.
+0146#STR0146#ALL#Resumo da programação  - homem hora disponível x programado
+0148#STR0148#ALL#Hh disponivel
+0149#STR0149#ALL#Hh Programado
+0151#STR0151#ALL#Backlog (hh)
+0152#STR0152#ALL#Backlog (dias)
+0154#STR0154#ALL#Aprovação  execução
+0155#STR0155#ALL#Aprovação  planeamento
+0156#STR0156#ALL# - período: 
+0157#STR0157#ALL#Número: 
+0161#STR0161#ALL#Hh
+0163#STR0163#ALL#Listagem  de mao-de-obra
+0164#STR0164#ALL#Adicionar is(
+0168#STR0168#ALL#Tempo disponivel
+0169#STR0169#ALL#Listagem  de artigos
+0170#STR0170#ALL#Qtd. necessária  
+0172#STR0172#ALL#Qtd. Em Stock
+0173#STR0173#ALL#Número  S.a.
+0174#STR0174#ALL#Elemento
+0175#STR0175#ALL#Número  S.c.
+0176#STR0176#ALL#Listagem  de ferramentas
+0177#STR0177#ALL#Listagem  de solicitação  ao armazém
+0178#STR0178#ALL#Num. s.a.
+0179#STR0179#ALL#Qtd. Na S.a.
+0180#STR0180#ALL#Stock
+0182#STR0182#ALL#Centro De Custo
+0184#STR0184#ALL#Nenhuma ordem de serviço foi seleccionada.
+0185#STR0185#ALL#Confirma a criação  de solicitação  ao armazém?
+0186#STR0186#ALL#Não foi possível localizar este número  de ordem de serviço.
+0187#STR0187#ALL#O Sistema de Manutenção de Activos possui incompatibilidade de dicionário.
+0188#STR0188#ALL#Favor, execute a função UPDMNT37. Para mais informações consulte o
+0194#STR0194#ALL#Não será possível alterar a Programação, pois a Data Fim da Programação é menor que a Data Actual.
+0196#STR0196#ALL#Equipa + Bem
+0199#STR0199#ALL#A carregar recursos
+0200#STR0200#ALL# / Evento Nr.: 
+0203#STR0203#ALL#Até C.Trabalho
+0220#STR0220#ALL#Data seleccionada no calendário
+0223#STR0223#ALL#Stock Físico
+0224#STR0224#ALL#Este Evento não pode ser seleccionado,
+0226#STR0226#ALL#pois está a ser utilizado na Programação: 
+0227#STR0227#ALL#A Data de Início não pode ser esta,
+0228#STR0228#ALL#pois existe uma O.S. Programada na
+0231#STR0231#ALL#Não pode ser programada uma O.S. para
+0241#STR0241#ALL#Qtd. Stock
+0243#STR0243#ALL#Não pode alterar a Data Fim, pois existe uma O.S. programada neste Evento para a data 
+0244#STR0244#ALL#não seleccionada para ser impressa
+0249#STR0249#ALL# não possui recurso previsto.
+0253#STR0253#ALL#Deseja aplicar esta resposta a todas as Ordens de Serviço sem recurso previsto?
+0254#STR0254#ALL#Cód.Estado
+0256#STR0256#ALL#A aguardar material
+0257#STR0257#ALL#A aguardar Mão-de-Obra
+0258#STR0258#ALL#A aguardar ferramenta
+0259#STR0259#ALL#A aguardar equipamentos auxiliares
+0260#STR0260#ALL#A aguardar programação
+0262#STR0262#ALL#Legenda do Estado da O.S.
+0267#STR0267#ALL#A verificar alterações...
+0276#STR0276#ALL#Insumo previsto
+0279#STR0279#ALL#Visualizar solicitação de compras
+0281#STR0281#ALL#Detalhar especialidade
+0282#STR0282#ALL#Data atrasada?
+0283#STR0283#ALL#Prog. aut. ?
+0284#STR0284#ALL#Quando o parâmetro 'Data atrasada' estiver igual a 'Sim', a data fim deve ser igual ou maior que a data base.
+0286#STR0286#ALL#Carga a programar
+0287#STR0287#ALL#Carga em programação
+0288#STR0288#ALL#De prioridade
+0289#STR0289#ALL#Até prioridade
+0290#STR0290#ALL#Quando o parâmetro 'Data atrasada' estiver igual a 'Sim', a data fim deve ser igual ou maior que a data base.
+0291#STR0291#ALL#A Data início não está dentro do período da Programação.
+0293#STR0293#ALL#A Data fim prevista para o insumo não está dentro do período da Programação.
+0294#STR0294#ALL#Data fim prevista:
+0297#STR0297#ALL#Até etapa
+0298#STR0298#ALL#De etapa
+0299#STR0299#ALL#De calendário
+0300#STR0300#ALL#Até calendário
+0305#STR0305#ALL#3=Menor ou igual a
+0308#STR0308#ALL#1=Correctiva
+0313#STR0313#ALL#Em programação
+0314#STR0314#ALL#Deseja reprogramar os O.S. já programadas? 
+0315#STR0315#ALL#Houve alteração na data prevista da ordem de serviço. Deseja confirmar a nova data?
