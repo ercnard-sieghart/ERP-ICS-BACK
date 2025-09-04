@@ -10,8 +10,8 @@ class UserController
 endclass
 
 method Login() class UserController
-    Local cContent := Self:GetContent() as Object
-    Local aResponse := LoginService():Login(cContent) as Object
+    Local cContent := Self:GetContent()
+    Local aResponse := LoginService():Login(cContent)
 
     ::SetResponse(aResponse)
 return

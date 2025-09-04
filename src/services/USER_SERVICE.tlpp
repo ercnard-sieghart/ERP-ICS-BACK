@@ -13,9 +13,9 @@ class LoginService
 endclass
 
 method Login(cContent) class LoginService
-	Local oBody := JsonObject():New() as Object
-	Local oResponse := JsonObject():New() as Object
-	Local aTokens := {} as Array
+	Local oBody := JsonObject():New()
+	Local oResponse := JsonObject():New()
+	Local aTokens := {}
 
 	oBody:FromJson(cContent)
 
