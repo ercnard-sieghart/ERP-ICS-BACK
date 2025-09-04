@@ -1,0 +1,43 @@
+#include "protheus.ch"
+#include "totvs.ch"
+#include "FWBrowse.ch"
+#include "TbiConn.ch"
+#include "topconn.ch"
+#include "rwmake.ch"
+
+#define MSG_SUCESS "Login realizado com sucesso."
+
+
+class LoginService
+	static method Login(cContent)
+endclass
+
+method Login(cContent) class LoginService
+	Local oBody := JsonObject():New()
+	Local oResponse := JsonObject():New()
+	Local aTokens := {}
+
+	oBody:FromJson(cContent)
+
+	aTokens := AuthService():AuthGetToken(oBody["username"], oBody["password"])
+
+	do case
+	case aTokens[1] == '400'
+		oResponse["message"] := "JSON invalido ou credenciais ausentes."
+	case aTokens[1] == '401'
+		oResponse["message"] := "Usuario ou senha invalidos."
+	case aTokens[1] == "403"
+		oResponse["message"] := "Acesso negado."
+	case aTokens[1] == '201'
+		oResponse["access_token"] := aTokens[2]
+		oResponse["refresh_token"] := aTokens[3]
+		oResponse["scope"] := aTokens[4]
+		oResponse["token_type"] := aTokens[5]
+		oResponse["expires_in"] := SecsToTime(aTokens[6])
+		oResponse["success"] := .t.
+		oResponse["message"] := MSG_SUCESS
+		oResponse["name"] := aTokens[7]
+		oResponse["email"] := aTokens[8]
+	endcase
+
+return oResponse
