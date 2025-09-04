@@ -1,0 +1,18 @@
+#include "protheus.ch"
+#include "RestFul.CH"
+#include "topconn.ch"
+#include "tbiconn.ch"
+#include "tlpp-rest.th"
+
+class UserController
+    @Post("/login")
+    public method Login()
+endclass
+
+method Login() class UserController
+    Local cContent := Self:GetContent() as Object
+    Local aResponse := LoginService():Login(cContent) as Object
+
+    ::SetResponse(aResponse)
+return
+
