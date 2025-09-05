@@ -1,0 +1,57 @@
+0001#STR0001#ALL#Pesquisar
+0002#STR0002#ALL#Visualizar
+0003#STR0003#ALL#Incluir
+0004#STR0004#ALL#Alterar
+0005#STR0005#ALL#Excluir
+0006#STR0006#ALL#Especificacao de Produtos
+0007#STR0007#ALL#Especificacao por Grupo
+0008#STR0008#ALL#Especificacoes
+0009#STR0009#ALL#Rastreabilidade
+0010#STR0010#ALL#Observacoes da Operacao
+0011#STR0011#ALL#Familia de Instrumentos
+0012#STR0012#ALL#Nao-Conformidades
+0013#STR0013#ALL#Visualizar o conteudo do Documento...
+0014#STR0014#ALL#Cont.Doc
+0015#STR0015#ALL#Valor invalido no campo 
+0016#STR0016#ALL#Tipo de Carta e/ou numero de 
+0017#STR0017#ALL#medicoes incorretos no ensaio calculado 
+0018#STR0018#ALL#O produto informado para a rastreabilidade, ja existe.
+0019#STR0019#ALL#Atencao
+0020#STR0020#ALL#O campo Tipo de Shelf-Life deve ser informado quando preenchido o campo Shelf-Life.
+0021#STR0021#ALL#Shelf-Life nao pode ser maior que 99 anos.
+0022#STR0022#ALL#A Familia informada nao esta cadastrada.
+0023#STR0023#ALL#Plano de Amostragem
+0024#STR0024#ALL#Nao existe plano de amostragem especifico. Cadastre-o primeiramente.
+0025#STR0025#ALL#Tipos de Planos de Amostragens
+0026#STR0026#ALL#Plano : 
+0027#STR0027#ALL#Aceite :
+0028#STR0028#ALL# | Rejeite : 
+0029#STR0029#ALL#O codigo da amostra nao esta relacionado com o nivel da amostra.
+0030#STR0031#ALL#O Recurso nao faz parte do grupo de recursos selecionado
+0031#STR0032#ALL#Ensaios
+0032#STR0033#ALL#Produto
+0033#STR0034#ALL#Grupo
+0034#STR0035#ALL# | Tam.Lote :
+0035#STR0036#ALL#Fator de conversäo deve ser diferente de zero.
+0036#STR0037#ALL#Roteiro
+0037#STR0038#ALL#Tipo de Roteiro
+0038#STR0039#ALL#Roteiro Primario
+0039#STR0040#ALL#Roteiro Secundario
+0040#STR0041#ALL#O Roteiro 
+0041#STR0042#ALL# ja foi cadastrado para esse produto. 
+0042#STR0043#ALL#Favor ativar o parametro MV_QIPMAT de integracäo entre os modulos de Materiais e o Inspecäo de Processo, deseja atualiza-lo agora ?
+0043#STR0044#ALL#A tabela de roteiros do modulo de Inspecao de Processos esta desatualizada em relacäo ao cadastro de Operacöes , deseja atualiza-la agora ?
+0044#STR0045#ALL#Nao utilizar Média e Desvio Padrao nas formulas para ensaios calculados do tipo tempo.
+0045#STR0046#ALL#Cod. Novo Roteiro
+0046#STR0047#ALL#Nao foi informado o Laboratorio(s) para o(s) ensaio(s) - Pasta Especificacoes
+0047#STR0048#ALL#Nao foi informado a Sequencia de Laboratorio para o(s) ensaio(s) - Pasta Especificacoes
+0048#STR0049#ALL#É obrigatorio informar familia de intrumento para os ensaios informados na especificação. 
+0049#STR0050#ALL#O(s) ensaio(s) 
+0050#STR0051#ALL# não possue(m) familia de intrumento informado
+0051#STR0052#ALL#Nao foi informada a Formula para o(s) ensaio(s) calculado(s) - Pasta Especificacoes
+0052#STR0053#ALL#Nao foi informado o campo Texto para o(s) ensaio(s) - Tipo Texto
+0053#STR0054#ALL#Para limpar o conteúdo do campo de roteiro, o campo produto deverá ser limpado primeiramente
+0054#STR0055#ALL#A fórmula cadastrada está incorreta.
+0055#STR0056#ALL#O tamanho da fórmula é superior a 
+0056#STR0057#ALL# caracteres.
+0057#STR0058#ALL#Produto Desenvolvido
