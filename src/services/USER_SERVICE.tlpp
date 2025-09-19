@@ -33,6 +33,5 @@ Method Login(cContent) Class LoginService as json
 	oJsonResp["LAST_LOGIN"] := AllTrim(aLastLogin[1])
 	oJsonResp["LAST_HOUR"] := AllTrim(aLastLogin[2])
 	oJsonResp["SUCCESS"] := .T.
-	oJsonResp["MESSAGE"] := "Informações do usuário obtidas com sucesso"
 
 Return oJsonResp
