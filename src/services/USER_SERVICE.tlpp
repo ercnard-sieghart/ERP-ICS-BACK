@@ -1,43 +1,38 @@
-#include "protheus.ch"
-#include "totvs.ch"
-#include "FWBrowse.ch"
-#include "TbiConn.ch"
-#include "topconn.ch"
-#include "rwmake.ch"
+#Include "protheus.ch"
+#Include "totvs.ch"
+#Include "FWBrowse.ch"
+#Include "TbiConn.ch"
+#Include "topconn.ch"
+#Include "rwmake.ch"
 
-#define MSG_SUCESS "Login realizado com sucesso."
+Class LoginService
 
+	Static Method Login(cContent) as json
 
-class LoginService
-	static method Login(cContent)
-endclass
+EndClass
 
-method Login(cContent) class LoginService
-	Local oBody := JsonObject():New()
-	Local oResponse := JsonObject():New()
-	Local aTokens := {}
+Method Login(cContent) Class LoginService as json
+	Local oJsonResp := JsonObject():New()
+	Local aGroups 
+	Local aLastLogin 
 
-	oBody:FromJson(cContent)
+	oJsonResp["USER_ID"] := AllTrim(__cUserID)
+	oJsonResp["USER_NAME"] := AllTrim(cUserName)
+	oJsonResp["USER_CODE"] := AllTrim(RetCodUsr())
+	oJsonResp["USER_FULLNAME"] := AllTrim(UsrFullName(__cUserID))
+	oJsonResp["USER_EMAIL"] := AllTrim(UsrRetMail(__cUserID))
+	
+	aGroups := UsrRetGrp(__cUserID)
+	oJsonResp["USER_GROUPS"] := aGroups
+	
+	oJsonResp["IS_ADMIN"] := FWIsAdmin(__cUserID)
+	oJsonResp["EMPRESA"] := AllTrim(cEmpAnt)
+	oJsonResp["FILIAL"] := AllTrim(cFilAnt)
 
-	aTokens := AuthService():AuthGetToken(oBody["username"], oBody["password"])
+	aLastLogin := FWUsrUltLog(__cUserID)
+	oJsonResp["LAST_LOGIN"] := AllTrim(aLastLogin[1])
+	oJsonResp["LAST_HOUR"] := AllTrim(aLastLogin[2])
+	oJsonResp["SUCCESS"] := .T.
+	oJsonResp["MESSAGE"] := "Informações do usuário obtidas com sucesso"
 
-	do case
-	case aTokens[1] == '400'
-		oResponse["message"] := "JSON invalido ou credenciais ausentes."
-	case aTokens[1] == '401'
-		oResponse["message"] := "Usuario ou senha invalidos."
-	case aTokens[1] == "403"
-		oResponse["message"] := "Acesso negado."
-	case aTokens[1] == '201'
-		oResponse["access_token"] := aTokens[2]
-		oResponse["refresh_token"] := aTokens[3]
-		oResponse["scope"] := aTokens[4]
-		oResponse["token_type"] := aTokens[5]
-		oResponse["expires_in"] := SecsToTime(aTokens[6])
-		oResponse["success"] := .t.
-		oResponse["message"] := MSG_SUCESS
-		oResponse["name"] := aTokens[7]
-		oResponse["email"] := aTokens[8]
-	endcase
-
-return oResponse
+Return oJsonResp

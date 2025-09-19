@@ -1,18 +1,13 @@
-#include "protheus.ch"
-#include "RestFul.CH"
-#include "topconn.ch"
-#include "tbiconn.ch"
-#include "tlpp-rest.th"
+#INCLUDE "tlpp-core.th"
+#INCLUDE "tlpp-rest.th"
+#INCLUDE "TopConn.ch"
+#INCLUDE "Protheus.ch"
 
-class UserController
-    @Post("/login")
-    public method Login()
-endclass
+@Post('/login', description='Retorna informações do usuário')
+User Function UserController()
+    Local oResponse := JsonObject():New()
 
-method Login() class UserController
-    Local cContent := Self:GetContent()
-    Local aResponse := LoginService():Login(cContent)
-
-    ::SetResponse(aResponse)
-return
-
+    oResponse := LoginService():Login()
+    oRest:SetResponse(oResponse:toJson())
+    
+Return 
