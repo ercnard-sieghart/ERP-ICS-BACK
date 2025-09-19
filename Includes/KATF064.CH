@@ -1,0 +1,5 @@
+#define STR0030 "STATUS"
+#define STR0038 "Itens"
+#define STR0031 "ABERTO"
+#define STR0033 "Alterar Cotação"
+#define STR0025 "Voltar"
