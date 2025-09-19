@@ -4,3 +4,8 @@
 
 # Ignorar pasta de testes
 teste/
+
+# Ignorar arquivos de log
+console_error.log
+console.log
+*.log

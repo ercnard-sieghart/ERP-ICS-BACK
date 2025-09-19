@@ -1,0 +1,13 @@
+#INCLUDE "tlpp-core.th"
+#INCLUDE "tlpp-rest.th"
+#INCLUDE "TopConn.ch"
+#INCLUDE "Protheus.ch"
+
+@Post('/login', description='Retorna informações do usuário')
+User Function UserController()
+    Local oResponse := JsonObject():New()
+
+    oResponse := LoginService():Login()
+    oRest:SetResponse(oResponse:toJson())
+    
+Return 

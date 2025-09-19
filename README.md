@@ -3,8 +3,12 @@
 Este repositório contém o backend do sistema ERP ICS.
 
 ## Estrutura
-- `core/` — Módulos principais e classes de autenticação
-- `webservices/` — Serviços web e integrações
+- `contabilidade/` — Fontes de contabilidade
+- `smartview/` — Objetos de Negócios
+- `src/` — Código-fonte principal
+	- `services/` — Serviços do sistema
+	- `util/` — Utilitários
+	- `web/` — Interface web
 
 ## Principais arquivos
 - `.gitignore` — Regras para ignorar arquivos e pastas

@@ -1,0 +1,37 @@
+#Include "protheus.ch"
+#Include "totvs.ch"
+#Include "FWBrowse.ch"
+#Include "TbiConn.ch"
+#Include "topconn.ch"
+#Include "rwmake.ch"
+
+Class LoginService
+
+	Static Method Login(cContent) as json
+
+EndClass
+
+Method Login(cContent) Class LoginService as json
+	Local oJsonResp := JsonObject():New()
+	Local aGroups 
+	Local aLastLogin 
+
+	oJsonResp["USER_ID"] := AllTrim(__cUserID)
+	oJsonResp["USER_NAME"] := AllTrim(cUserName)
+	oJsonResp["USER_CODE"] := AllTrim(RetCodUsr())
+	oJsonResp["USER_FULLNAME"] := AllTrim(UsrFullName(__cUserID))
+	oJsonResp["USER_EMAIL"] := AllTrim(UsrRetMail(__cUserID))
+	
+	aGroups := UsrRetGrp(__cUserID)
+	oJsonResp["USER_GROUPS"] := aGroups
+	
+	oJsonResp["IS_ADMIN"] := FWIsAdmin(__cUserID)
+	oJsonResp["EMPRESA"] := AllTrim(cEmpAnt)
+	oJsonResp["FILIAL"] := AllTrim(cFilAnt)
+
+	aLastLogin := FWUsrUltLog(__cUserID)
+	oJsonResp["LAST_LOGIN"] := AllTrim(aLastLogin[1])
+	oJsonResp["LAST_HOUR"] := AllTrim(aLastLogin[2])
+	oJsonResp["SUCCESS"] := .T.
+
+Return oJsonResp

@@ -1,0 +1,42 @@
+#INCLUDE "protheus.ch"
+#INCLUDE "FWMVCDEF.CH"
+#INCLUDE "tlpp-core.th"
+ 
+Namespace contabilidade
+
+User Function SZ2_GET_DADOS()
+    Local cUrl      := "http://institutoclima128986.protheus.cloudtotvs.com.br:4050"
+    Local oRest     := FWRest():New(cUrl)
+    Local aHeaders  := {}
+    Local oResult   := {}
+    Local i
+
+    AAdd(aHeaders, "Authorization: Basic YWRtaW46I2lDUyMyMDI1Iw==")
+    AAdd(aHeaders, "Content-Type: application/json")
+ 
+    oRest:SetPath("/rest/ICSWS003?tabela=SZ2")
+ 
+    If oRest:GET(aHeaders)
+        oResult := JsonObject():New()
+        i := contabilidade.ARMAZENA_SZ2():New(oResult)
+        i:Execute()
+    Else
+        MsgStop("Erro: " + oRest:GetError())
+    EndIf
+ 
+Return
+
+
+function sampleIsProbat()
+ 
+  local jModule
+ 
+  if ( tlpp.module( 'PROBAT', @jModule ) )
+    conout( 'Ferramenta: ' + jModule['module'] )
+    conout( 'Instalado?: ' + if( jModule['linked'], 'sim', 'não' ) )
+    conout( 'Versão....: ' + jModule['version'] )
+  else
+    conout( ' >> Ferramenta não instalada <<' )
+  endif
+ 
+return Nil
