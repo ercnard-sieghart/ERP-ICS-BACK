@@ -1,0 +1,113 @@
+#Include "protheus.ch"
+#Include "totvs.ch"
+#Include "FWBrowse.ch"
+#Include "TbiConn.ch"
+#Include "topconn.ch"
+#Include "rwmake.ch"
+
+Class SC7Service
+    Static Method GetPedidos() as json
+EndClass
+
+Method GetPedidos() Class SC7Service as json
+	Local aJsonResp := {}
+	Local cQuery := ""
+	Local cAlias := GetNextAlias()
+	Local aFields := {}
+	Local aImportantFields := {}
+	Local nField
+	Local aRow := {}
+	Local xValue
+	Local cFieldName := ""
+	Local nFieldPos := 0
+	Local cFieldType := ""
+	Local oJsonResponse := JsonObject():New()
+	Local oJsonItem := Nil
+	Local nItem := 0
+	Local nCampo := 0
+
+	AAdd(aImportantFields, "C7_NUM")     // Número do pedido
+	AAdd(aImportantFields, "C7_ITEM")    // Item
+	AAdd(aImportantFields, "C7_PRODUTO") // Produto
+	AAdd(aImportantFields, "C7_DESCRI")  // Descrição
+	AAdd(aImportantFields, "C7_QUANT")   // Quantidade
+	AAdd(aImportantFields, "C7_PRECO")   // Preço unitário
+	AAdd(aImportantFields, "C7_TOTAL")   // Total
+	AAdd(aImportantFields, "C7_EMISSAO") // Emissão
+	AAdd(aImportantFields, "C7_DATPRF")  // Data prevista
+	AAdd(aImportantFields, "C7_FORNECE") // Fornecedor
+	AAdd(aImportantFields, "C7_CONTATO") // Contato
+	AAdd(aImportantFields, "C7_LOJA")    // Loja
+	AAdd(aImportantFields, "C7_ITEMCTA") // Item contábil
+	AAdd(aImportantFields, "C7_CONTA")   // Conta contábil
+	AAdd(aImportantFields, "C7_CC")      // Centro de custo
+	AAdd(aImportantFields, "C7_OBS")     // Observações
+
+
+	DbSelectArea("SC7")
+	aFields := SC7->(DbStruct())
+	
+	cQuery := "SELECT "
+	For nField := 1 To Len(aImportantFields)
+		cQuery += aImportantFields[nField]
+		If nField < Len(aImportantFields)
+			cQuery += ", "
+		EndIf
+	Next
+
+	cQuery += " FROM " + RetSqlName("SC7") + " SC7 "
+	cQuery += "WHERE SC7.D_E_L_E_T_ = ' ' "
+	cQuery += "ORDER BY C7_NUM, C7_ITEM "
+
+	cQuery := ChangeQuery(cQuery)
+	dbUseArea(.T., "TOPCONN", TCGenQry(,, cQuery), cAlias, .F., .T.)
+
+    (cAlias)->(dbGoTop())
+    
+    While !(cAlias)->(Eof())
+		aRow := {}
+		
+        For nField := 1 To Len(aImportantFields)
+            cFieldName := aImportantFields[nField]
+            xValue := (cAlias)->(FieldGet(nField))
+            
+            nFieldPos := AScan(aFields, {|x| x[1] == cFieldName})
+            cFieldType := If(nFieldPos > 0, aFields[nFieldPos][2], "C")
+            
+            Do Case
+                Case cFieldType == "C"  // Caracter
+                    xValue := AllTrim(xValue)
+                Case cFieldType == "N"  // Numérico
+                    // Mantém o valor numérico
+                Case cFieldType == "D"  // Data
+                    xValue := Date(xValue) 
+                Case cFieldType == "L"  // Lógico
+                    // Mantém o valor lógico
+            EndCase
+            
+            AAdd(aRow, {cFieldName, xValue})
+        Next
+
+        AAdd(aJsonResp, aRow)
+        
+        (cAlias)->(dbSkip())
+    EndDo
+    
+    (cAlias)->(dbCloseArea())
+    
+    oJsonResponse["success"] := .T.
+    oJsonResponse["message"] := "Pedidos de compra obtidos com sucesso"
+    oJsonResponse["total"] := Len(aJsonResp)
+    oJsonResponse["items"] := {}
+    
+    For nItem := 1 To Len(aJsonResp)
+        oJsonItem := JsonObject():New()
+        
+        For nCampo := 1 To Len(aJsonResp[nItem])
+            oJsonItem[aJsonResp[nItem][nCampo][1]] := aJsonResp[nItem][nCampo][2]
+        Next
+        
+        AAdd(oJsonResponse["items"], oJsonItem)
+    Next
+    
+Return oJsonResponse
