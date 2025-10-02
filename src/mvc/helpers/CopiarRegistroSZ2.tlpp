@@ -1,0 +1,173 @@
+#Include "Protheus.ch"
+#Include "FWMVCDef.ch" 
+#Include "totvs.ch"
+
+//+------------------------------------------------------------------+
+//| CopiarRegistroSZ2 - Copia registro SZ2 para edição              |
+//| Abre o registro selecionado como cópia para inserir novo        |
+//+------------------------------------------------------------------+
+User Function CopiarRegistroSZ2()
+    Local oModel    := Nil
+    Local oModelSZ2 := Nil
+    Local lRet      := .T.
+    Local aAreaSZ2  := SZ2->(GetArea())
+    
+    // Valida se há registro posicionado
+    If SZ2->(Eof()) .Or. SZ2->(Bof())
+        MsgAlert("Nenhum registro selecionado para cópia!", "Atenção")
+        Return .F.
+    EndIf
+    
+    // Cria o modelo em modo de inclusão (cópia)
+    oModel := FWLoadModel("MVCSZ2")
+    oModel:SetOperation(MODEL_OPERATION_INSERT) // Modo inclusão
+    oModel:Activate()
+    
+    // Obtém o modelo de dados da SZ2
+    oModelSZ2 := oModel:GetModel("SZ2MASTER")
+    
+    If oModelSZ2 != Nil
+        // Copia os valores do registro posicionado para o novo
+        oModelSZ2:SetValue("Z2_FILIAL", xFilial("SZ2"))
+        
+        // Campos que devem ser copiados (ajuste conforme sua tabela SZ2)
+        If SZ2->(FieldPos("Z2_DESCRI")) > 0
+            oModelSZ2:SetValue("Z2_DESCRI", AllTrim(SZ2->Z2_DESCRI) + " - COPIA")
+        EndIf
+        
+        If SZ2->(FieldPos("Z2_VALOR")) > 0
+            oModelSZ2:SetValue("Z2_VALOR", SZ2->Z2_VALOR)
+        EndIf
+        
+        If SZ2->(FieldPos("Z2_CLIENTE")) > 0
+            oModelSZ2:SetValue("Z2_CLIENTE", SZ2->Z2_CLIENTE)
+        EndIf
+        
+        If SZ2->(FieldPos("Z2_LOJA")) > 0
+            oModelSZ2:SetValue("Z2_LOJA", SZ2->Z2_LOJA)
+        EndIf
+        
+        If SZ2->(FieldPos("Z2_EMISSAO")) > 0
+            oModelSZ2:SetValue("Z2_EMISSAO", Date()) // Data atual
+        EndIf
+        
+        If SZ2->(FieldPos("Z2_VALID")) > 0
+            oModelSZ2:SetValue("Z2_VALID", Date() + 30) // Validade 30 dias
+        EndIf
+        
+        If SZ2->(FieldPos("Z2_STATUS")) > 0
+            oModelSZ2:SetValue("Z2_STATUS", "1") // Status inicial
+        EndIf
+        
+        If SZ2->(FieldPos("Z2_OBS")) > 0
+            oModelSZ2:SetValue("Z2_OBS", AllTrim(SZ2->Z2_OBS) + " [COPIA]")
+        EndIf
+        
+        // Abre a tela para o usuário editar a cópia
+        FWExecView("Cópia de Orçamento", "MVCSZ2", MODEL_OPERATION_INSERT,, {|| .T.},,,, oModel)
+        
+    Else
+        MsgAlert("Erro ao criar modelo de dados!", "Erro")
+        lRet := .F.
+    EndIf
+    
+    // Restaura área
+    RestArea(aAreaSZ2)
+    
+Return lRet
+
+//+------------------------------------------------------------------+
+//| CopiarComDialog - Copia com diálogo de parâmetros               |
+//| Permite ao usuário definir alguns campos antes da cópia         |
+//+------------------------------------------------------------------+
+User Function CopiarComDialog()
+    Local oDlg
+    Local oGet1, oGet2, oGet3
+    Local cDescri   := ""
+    Local dEmissao  := Date()
+    Local dValidade := Date() + 30
+    Local lOk       := .F.
+    
+    // Valida se há registro posicionado
+    If SZ2->(Eof()) .Or. SZ2->(Bof())
+        MsgAlert("Nenhum registro selecionado para cópia!", "Atenção")
+        Return .F.
+    EndIf
+    
+    // Prepara descrição inicial
+    If SZ2->(FieldPos("Z2_DESCRI")) > 0
+        cDescri := AllTrim(SZ2->Z2_DESCRI) + " - C	OPIA"
+    EndIf
+    
+    DEFINE MSDIALOG oDlg TITLE "Parâmetros da Cópia - Orçamento: " + SZ2->Z2_COD FROM 0,0 TO 250,500 PIXEL
+    
+        @ 020,010 SAY "Descrição:"        SIZE 060,010 PIXEL OF oDlg
+        @ 018,070 MSGET oGet1 VAR cDescri     SIZE 150,010 PIXEL OF oDlg
+        
+        @ 040,010 SAY "Data Emissão:"     SIZE 060,010 PIXEL OF oDlg  
+        @ 038,070 MSGET oGet2 VAR dEmissao    SIZE 060,010 PIXEL OF oDlg
+        
+        @ 060,010 SAY "Data Validade:"    SIZE 060,010 PIXEL OF oDlg
+        @ 058,070 MSGET oGet3 VAR dValidade   SIZE 060,010 PIXEL OF oDlg
+        
+        @ 090,070 BUTTON "Copiar e Editar" SIZE 060,015 PIXEL OF oDlg ACTION (lOk := .T., oDlg:End())
+        @ 090,140 BUTTON "Cancelar"       SIZE 050,015 PIXEL OF oDlg ACTION oDlg:End()
+        
+    ACTIVATE MSDIALOG oDlg CENTERED
+    
+    If lOk
+        U_ExecutarCopia(cDescri, dEmissao, dValidade)
+    EndIf
+    
+Return
+
+//+------------------------------------------------------------------+
+//| ExecutarCopia - Executa cópia com parâmetros definidos          |
+//+------------------------------------------------------------------+
+User Function ExecutarCopia(cDescri, dEmissao, dValidade)
+    Local oModel    := Nil
+    Local oModelSZ2 := Nil
+    Local lRet      := .T.
+    
+    // Cria o modelo em modo de inclusão
+    oModel := FWLoadModel("MVCSZ2")
+    oModel:SetOperation(MODEL_OPERATION_INSERT)
+    oModel:Activate()
+    
+    oModelSZ2 := oModel:GetModel("SZ2MASTER")
+    
+    If oModelSZ2 != Nil
+        // Define os valores com os parâmetros informados
+        oModelSZ2:SetValue("Z2_FILIAL", xFilial("SZ2"))
+        
+        If !Empty(cDescri)
+            oModelSZ2:SetValue("Z2_DESCRI", cDescri)
+        EndIf
+        
+        oModelSZ2:SetValue("Z2_EMISSAO", dEmissao)
+        oModelSZ2:SetValue("Z2_VALID", dValidade)
+        
+        // Copia outros campos do registro original
+        If SZ2->(FieldPos("Z2_VALOR")) > 0
+            oModelSZ2:SetValue("Z2_VALOR", SZ2->Z2_VALOR)
+        EndIf
+        
+        If SZ2->(FieldPos("Z2_CLIENTE")) > 0
+            oModelSZ2:SetValue("Z2_CLIENTE", SZ2->Z2_CLIENTE)
+        EndIf
+        
+        If SZ2->(FieldPos("Z2_LOJA")) > 0
+            oModelSZ2:SetValue("Z2_LOJA", SZ2->Z2_LOJA)
+        EndIf
+        
+        oModelSZ2:SetValue("Z2_STATUS", "1") // Status inicial
+        
+        // Abre para edição
+        FWExecView("Nova Cópia - Orçamento", "MVCSZ2", MODEL_OPERATION_INSERT,, {|| .T.},,,, oModel)
+        
+    Else
+        MsgAlert("Erro ao criar cópia!", "Erro")
+        lRet := .F.
+    EndIf
+    
+Return lRet

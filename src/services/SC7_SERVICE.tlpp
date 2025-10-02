@@ -7,6 +7,7 @@
 
 Class SC7Service
     Static Method GetPedidos() as json
+    Static Method DuplicatePedido(cSourceNum, cSourceItem, oNewData) as json
 EndClass
 
 Method GetPedidos() Class SC7Service as json
@@ -111,3 +112,104 @@ Method GetPedidos() Class SC7Service as json
     Next
     
 Return oJsonResponse
+
+Method DuplicatePedido(cSourceNum, cSourceItem, oNewData) Class SC7Service as json
+    Local oResponse := JsonObject():New()
+    Local cQuery := ""
+    Local cAlias := GetNextAlias()
+    Local aFields := {}
+    Local nField := 0
+    Local cNewNum := ""
+    Local cNewItem := ""
+    Local lSuccess := .F.
+    
+    // Busca o registro origem
+    cQuery := "SELECT * FROM " + RetSqlName("SC7") + " "
+    cQuery += "WHERE C7_NUM = '" + cSourceNum + "' "
+    cQuery += "AND C7_ITEM = '" + cSourceItem + "' "
+    cQuery += "AND D_E_L_E_T_ = ' ' "
+    
+    cQuery := ChangeQuery(cQuery)
+    dbUseArea(.T., "TOPCONN", TCGenQry(,, cQuery), cAlias, .F., .T.)
+    
+    If (cAlias)->(Eof())
+        oResponse["success"] := .F.
+        oResponse["message"] := "Registro origem não encontrado"
+        (cAlias)->(dbCloseArea())
+        Return oResponse
+    EndIf
+    
+    // Gera novo número e item
+    cNewNum := oNewData["newNum"] // Pode vir do frontend
+    cNewItem := oNewData["newItem"] // Pode vir do frontend
+    
+    // Se não informado, gera automaticamente
+    If Empty(cNewNum)
+        cNewNum := ProxNum() // Função para próximo número
+    EndIf
+    
+    If Empty(cNewItem)
+        cNewItem := "01"
+    EndIf
+    
+    // Inicia transação
+    Begin Transaction
+        
+        // Abre a tabela SC7 para inclusão
+        DbSelectArea("SC7")
+        SC7->(DbSetOrder(1)) // C7_NUM + C7_ITEM
+        
+        // Verifica se já existe
+        If SC7->(DbSeek(xFilial("SC7") + cNewNum + cNewItem))
+            oResponse["success"] := .F.
+            oResponse["message"] := "Registro já existe com esse número/item"
+            DisarmTransaction()
+        Else
+            // Inclui novo registro
+            SC7->(RecLock("SC7", .T.))
+            
+            // Copia todos os campos do registro origem
+            aFields := SC7->(DbStruct())
+            For nField := 1 To Len(aFields)
+                cFieldName := aFields[nField][1]
+                
+                Do Case
+                    Case cFieldName == "C7_NUM"
+                        SC7->C7_NUM := cNewNum
+                    Case cFieldName == "C7_ITEM"  
+                        SC7->C7_ITEM := cNewItem
+                    Case cFieldName == "C7_EMISSAO"
+                        SC7->C7_EMISSAO := Date() // Data atual
+                    Case SubStr(cFieldName, 1, 2) == "C7"
+                        // Copia valor do registro origem
+                        xValue := (cAlias)->(FieldGet((cAlias)->(FieldPos(cFieldName))))
+                        SC7->(FieldPut(SC7->(FieldPos(cFieldName)), xValue))
+                EndCase
+            Next
+            
+            // Aplica modificações vindas do frontend
+            If ValType(oNewData["modifications"]) == "O"
+                If !Empty(oNewData["modifications"]["C7_QUANT"])
+                    SC7->C7_QUANT := oNewData["modifications"]["C7_QUANT"]
+                EndIf
+                If !Empty(oNewData["modifications"]["C7_DATPRF"])
+                    SC7->C7_DATPRF := CtoD(oNewData["modifications"]["C7_DATPRF"])
+                EndIf
+                // Adicione outros campos conforme necessário
+            EndIf
+            
+            SC7->(MsUnlock())
+            lSuccess := .T.
+        EndIf
+        
+    End Transaction
+    
+    (cAlias)->(dbCloseArea())
+    
+    If lSuccess
+        oResponse["success"] := .T.
+        oResponse["message"] := "Pedido duplicado com sucesso"
+        oResponse["newRecord"] := {"C7_NUM": cNewNum, "C7_ITEM": cNewItem}
+    EndIf
+    
+Return oResponse

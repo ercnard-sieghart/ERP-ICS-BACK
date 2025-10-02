@@ -10,3 +10,25 @@ User Function SC7Controller()
   	oSC7Service := SC7Service():GetPedidos()
     oRest:SetResponse(oSC7Service:toJson())
 Return
+
+@Post('/pedidos-compra/duplicate', description='Duplica um pedido de compra existente')
+User Function SC7DuplicateController()
+    Local oJsonRequest := JsonObject():New()
+    Local cBody := oRest:GetBodyRequest()
+    Local oResponse := JsonObject():New()
+    
+    oJsonRequest:FromJson(cBody)
+    
+    // Valida se tem os dados necessários
+    If Empty(oJsonRequest["sourceNum"]) .Or. Empty(oJsonRequest["sourceItem"])
+        oResponse["success"] := .F.
+        oResponse["message"] := "Número e item do pedido origem são obrigatórios"
+        oRest:SetResponse(oResponse:toJson())
+        Return
+    EndIf
+    
+    // Chama o serviço de duplicação
+    oResponse := SC7Service():DuplicatePedido(oJsonRequest["sourceNum"], oJsonRequest["sourceItem"], oJsonRequest)
+    
+    oRest:SetResponse(oResponse:toJson())
+Return
