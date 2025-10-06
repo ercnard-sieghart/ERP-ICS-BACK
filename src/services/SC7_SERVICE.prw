@@ -6,11 +6,11 @@
 #Include "rwmake.ch"
 
 Class SC7Service
-    Static Method GetPedidos() as json
-    Static Method DuplicatePedido(cSourceNum, cSourceItem, oNewData) as json
+    Static Method GetPedidos()
+    // Static Method DuplicatePedido(cSourceNum, cSourceItem, oNewData) 
 EndClass
 
-Method GetPedidos() Class SC7Service as json
+Method GetPedidos() Class SC7Service 
 	Local aJsonResp := {}
 	Local cQuery := ""
 	Local cAlias := GetNextAlias()
@@ -27,22 +27,22 @@ Method GetPedidos() Class SC7Service as json
 	Local nItem := 0
 	Local nCampo := 0
 
-	AAdd(aImportantFields, "C7_NUM")     // Número do pedido
-	AAdd(aImportantFields, "C7_ITEM")    // Item
-	AAdd(aImportantFields, "C7_PRODUTO") // Produto
-	AAdd(aImportantFields, "C7_DESCRI")  // Descrição
-	AAdd(aImportantFields, "C7_QUANT")   // Quantidade
-	AAdd(aImportantFields, "C7_PRECO")   // Preço unitário
-	AAdd(aImportantFields, "C7_TOTAL")   // Total
-	AAdd(aImportantFields, "C7_EMISSAO") // Emissão
-	AAdd(aImportantFields, "C7_DATPRF")  // Data prevista
-	AAdd(aImportantFields, "C7_FORNECE") // Fornecedor
-	AAdd(aImportantFields, "C7_CONTATO") // Contato
-	AAdd(aImportantFields, "C7_LOJA")    // Loja
-	AAdd(aImportantFields, "C7_ITEMCTA") // Item contábil
-	AAdd(aImportantFields, "C7_CONTA")   // Conta contábil
-	AAdd(aImportantFields, "C7_CC")      // Centro de custo
-	AAdd(aImportantFields, "C7_OBS")     // Observações
+	AAdd(aImportantFields, "C7_NUM")
+	AAdd(aImportantFields, "C7_ITEM")
+	AAdd(aImportantFields, "C7_PRODUTO")
+	AAdd(aImportantFields, "C7_DESCRI")
+	AAdd(aImportantFields, "C7_QUANT")
+	AAdd(aImportantFields, "C7_PRECO")
+	AAdd(aImportantFields, "C7_TOTAL")
+	AAdd(aImportantFields, "C7_EMISSAO")
+	AAdd(aImportantFields, "C7_DATPRF")
+	AAdd(aImportantFields, "C7_FORNECE")
+	AAdd(aImportantFields, "C7_CONTATO")
+	AAdd(aImportantFields, "C7_LOJA")
+	AAdd(aImportantFields, "C7_ITEMCTA")
+	AAdd(aImportantFields, "C7_CONTA")
+	AAdd(aImportantFields, "C7_CC")
+	AAdd(aImportantFields, "C7_OBS")
 
 
 	DbSelectArea("SC7")
@@ -76,14 +76,14 @@ Method GetPedidos() Class SC7Service as json
             cFieldType := If(nFieldPos > 0, aFields[nFieldPos][2], "C")
             
             Do Case
-                Case cFieldType == "C"  // Caracter
+                Case cFieldType == "C"
                     xValue := AllTrim(xValue)
-                Case cFieldType == "N"  // Numérico
-                    // Mantém o valor numérico
-                Case cFieldType == "D"  // Data
+                Case cFieldType == "N"
+                    
+                Case cFieldType == "D"
                     xValue := Date(xValue) 
-                Case cFieldType == "L"  // Lógico
-                    // Mantém o valor lógico
+                Case cFieldType == "L"
+                    
             EndCase
             
             AAdd(aRow, {cFieldName, xValue})
@@ -113,7 +113,8 @@ Method GetPedidos() Class SC7Service as json
     
 Return oJsonResponse
 
-Method DuplicatePedido(cSourceNum, cSourceItem, oNewData) Class SC7Service as json
+/**
+Method DuplicatePedido(cSourceNum, cSourceItem, oNewData) Class SC7Service
     Local oResponse := JsonObject():New()
     Local cQuery := ""
     Local cAlias := GetNextAlias()
@@ -123,7 +124,6 @@ Method DuplicatePedido(cSourceNum, cSourceItem, oNewData) Class SC7Service as js
     Local cNewItem := ""
     Local lSuccess := .F.
     
-    // Busca o registro origem
     cQuery := "SELECT * FROM " + RetSqlName("SC7") + " "
     cQuery += "WHERE C7_NUM = '" + cSourceNum + "' "
     cQuery += "AND C7_ITEM = '" + cSourceItem + "' "
@@ -139,36 +139,29 @@ Method DuplicatePedido(cSourceNum, cSourceItem, oNewData) Class SC7Service as js
         Return oResponse
     EndIf
     
-    // Gera novo número e item
-    cNewNum := oNewData["newNum"] // Pode vir do frontend
-    cNewItem := oNewData["newItem"] // Pode vir do frontend
+    cNewNum := oNewData["newNum"]
+    cNewItem := oNewData["newItem"]
     
-    // Se não informado, gera automaticamente
     If Empty(cNewNum)
-        cNewNum := ProxNum() // Função para próximo número
+        cNewNum := ProxNum()
     EndIf
     
     If Empty(cNewItem)
         cNewItem := "01"
     EndIf
     
-    // Inicia transação
     Begin Transaction
         
-        // Abre a tabela SC7 para inclusão
         DbSelectArea("SC7")
-        SC7->(DbSetOrder(1)) // C7_NUM + C7_ITEM
+        SC7->(DbSetOrder(1))
         
-        // Verifica se já existe
         If SC7->(DbSeek(xFilial("SC7") + cNewNum + cNewItem))
             oResponse["success"] := .F.
             oResponse["message"] := "Registro já existe com esse número/item"
             DisarmTransaction()
         Else
-            // Inclui novo registro
             SC7->(RecLock("SC7", .T.))
             
-            // Copia todos os campos do registro origem
             aFields := SC7->(DbStruct())
             For nField := 1 To Len(aFields)
                 cFieldName := aFields[nField][1]
@@ -179,15 +172,13 @@ Method DuplicatePedido(cSourceNum, cSourceItem, oNewData) Class SC7Service as js
                     Case cFieldName == "C7_ITEM"  
                         SC7->C7_ITEM := cNewItem
                     Case cFieldName == "C7_EMISSAO"
-                        SC7->C7_EMISSAO := Date() // Data atual
+                        SC7->C7_EMISSAO := Date()
                     Case SubStr(cFieldName, 1, 2) == "C7"
-                        // Copia valor do registro origem
                         xValue := (cAlias)->(FieldGet((cAlias)->(FieldPos(cFieldName))))
                         SC7->(FieldPut(SC7->(FieldPos(cFieldName)), xValue))
                 EndCase
             Next
             
-            // Aplica modificações vindas do frontend
             If ValType(oNewData["modifications"]) == "O"
                 If !Empty(oNewData["modifications"]["C7_QUANT"])
                     SC7->C7_QUANT := oNewData["modifications"]["C7_QUANT"]
@@ -195,7 +186,6 @@ Method DuplicatePedido(cSourceNum, cSourceItem, oNewData) Class SC7Service as js
                 If !Empty(oNewData["modifications"]["C7_DATPRF"])
                     SC7->C7_DATPRF := CtoD(oNewData["modifications"]["C7_DATPRF"])
                 EndIf
-                // Adicione outros campos conforme necessário
             EndIf
             
             SC7->(MsUnlock())

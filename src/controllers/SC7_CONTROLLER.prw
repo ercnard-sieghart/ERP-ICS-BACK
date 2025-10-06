@@ -1,25 +1,31 @@
-#Include "tlpp-core.th"
-#Include "tlpp-rest.th"
-#Include "TopConn.ch"
-#Include "Protheus.ch"
+#Include 'protheus.ch'
+#Include 'parmtype.ch'
+#Include 'RestFul.ch'
 
-@Get('/pedidos-compra', description='Retorna pedidos de compra (SC7)')
-User Function SC7Controller() 
+User Function SC7Controller
+Return
+
+WSRESTFUL PEDIDOCOMPRAS DESCRIPTION "WS PEDIDO DE COMPRAS"
+	
+	WSMETHOD GET DESCRIPTION "Retorna pedidos de compra (SC7)" WSSYNTAX ""
+    WSMETHOD POST DESCRIPTION "Duplica um pedido de compra existente" WSSYNTAX "/duplicate"
+
+END WSRESTFUL
+
+WSMETHOD GET WSRECEIVE RECEIVE WSSERVICE PEDIDOCOMPRAS
 	Local oSC7Service
 
   	oSC7Service := SC7Service():GetPedidos()
     oRest:SetResponse(oSC7Service:toJson())
 Return
 
-@Post('/pedidos-compra/duplicate', description='Duplica um pedido de compra existente')
-User Function SC7DuplicateController()
+WSMETHOD POST WSRECEIVE RECEIVE WSSERVICE PEDIDOCOMPRAS
     Local oJsonRequest := JsonObject():New()
     Local cBody := oRest:GetBodyRequest()
     Local oResponse := JsonObject():New()
     
     oJsonRequest:FromJson(cBody)
     
-    // Valida se tem os dados necessários
     If Empty(oJsonRequest["sourceNum"]) .Or. Empty(oJsonRequest["sourceItem"])
         oResponse["success"] := .F.
         oResponse["message"] := "Número e item do pedido origem são obrigatórios"
@@ -27,7 +33,6 @@ User Function SC7DuplicateController()
         Return
     EndIf
     
-    // Chama o serviço de duplicação
     oResponse := SC7Service():DuplicatePedido(oJsonRequest["sourceNum"], oJsonRequest["sourceItem"], oJsonRequest)
     
     oRest:SetResponse(oResponse:toJson())
