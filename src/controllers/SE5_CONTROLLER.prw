@@ -9,7 +9,7 @@ WSRESTFUL EXTRATOBANCARIO DESCRIPTION "Retorna informações do extrato bancário"
 
     WSMETHOD POST DESCRIPTION "Retorna informações do extrato bancário" WSSYNTAX ""
     WSMETHOD GET DESCRIPTION "Retorna lista de bancos disponíveis" WSSYNTAX "/bancos"
-    WSMETHOD GET GETByCOD DESCRIPTION "Retorna agências do banco especificado" WSSYNTAX "/agencias/{id}" PATH "/agencias/{id}"
+    WSMETHOD POST GETByCOD DESCRIPTION "Retorna agências do banco especificado" WSSYNTAX "/bancos/agencias" PATH "/bancos/agencias"
 
 END WSRESTFUL
 
@@ -32,7 +32,7 @@ WSMETHOD GET WSRECEIVE RECEIVE WSSERVICE EXTRATOBANCARIO
 Return
 
 
-WSMETHOD GET GETByCOD WSRECEIVE RECEIVE WSSERVICE EXTRATOBANCARIO
+WSMETHOD POST GETByCOD WSRECEIVE RECEIVE WSSERVICE EXTRATOBANCARIO
     Local oResponse := JsonObject():New()
     Local oBody  := JsonObject():New()
 

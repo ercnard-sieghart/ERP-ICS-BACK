@@ -230,8 +230,8 @@ Method GetAgencias(oBody) Class SE5Service as json
     While !(cAlias)->(Eof())
         
         oAgencia := JsonObject():New()
-        oAgencia["A6_COD"] := AllTrim((cAlias)->CODIGO_BANCO)
-        oAgencia["A6_AGENCIA"] := AllTrim((cAlias)->AGENCIA)
+        oAgencia["COD"] := AllTrim((cAlias)->CODIGO_BANCO)
+        oAgencia["AGENCIAS"] := AllTrim((cAlias)->AGENCIA)
         
         AAdd(aAgencias, oAgencia)
         
