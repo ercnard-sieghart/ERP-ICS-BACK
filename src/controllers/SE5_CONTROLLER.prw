@@ -7,10 +7,10 @@ Return
 
 WSRESTFUL EXTRATOBANCARIO DESCRIPTION "Retorna informações do extrato bancário"
 
-    WSMETHOD POST DESCRIPTION "Retorna informações do extrato bancário" WSSYNTAX ""
-    WSMETHOD GET DESCRIPTION "Retorna lista de bancos disponíveis" WSSYNTAX "/bancos"
-    WSMETHOD POST GETByCOD DESCRIPTION "Retorna agências do banco especificado" WSSYNTAX "/bancos/agencias" PATH "/bancos/agencias"
-    WSMETHOD POST GETByAGE DESCRIPTION "Retorna contas do banco especificado" WSSYNTAX "/bancos/agencias/contas" PATH "/bancos/agencias/contas"
+    WSMETHOD POST          DESCRIPTION "Retorna informações do extrato bancário"    WSSYNTAX ""
+    WSMETHOD GET           DESCRIPTION "Retorna lista de bancos disponíveis"        WSSYNTAX "/bancos"
+    WSMETHOD POST GETByCOD DESCRIPTION "Retorna agências do banco especificado"     WSSYNTAX "/bancos/agencias" PATH "/bancos/agencias"
+    WSMETHOD POST GETByAGE DESCRIPTION "Retorna contas do banco especificado"       WSSYNTAX "/bancos/agencias/agencia/contas"   PATH "/bancos/AGENCIAS/contas"
 
 END WSRESTFUL
 
