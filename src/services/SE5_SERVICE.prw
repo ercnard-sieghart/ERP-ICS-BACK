@@ -7,6 +7,7 @@ Class SE5Service
     Static Method GetExtratoBancario(oParams) as json
     Static Method GetBancos() as json
     Static Method GetAgencias(cCodigo) as json
+    Static Method GetContas(cCodigo, cAgencia) as json
 EndClass
 
 Method GetExtratoBancario(oParams) Class SE5Service as json
@@ -244,5 +245,82 @@ Method GetAgencias(oBody) Class SE5Service as json
     oJsonResponse["message"] := "Agências obtidas com sucesso"
     oJsonResponse["total"] := Len(aAgencias)
     oJsonResponse["agencias"] := aAgencias
+    
+Return oJsonResponse
+
+Method GetContas(oBody) Class SE5Service as json
+    Local oJsonResponse := JsonObject():New()
+    Local cQuery := ""
+    Local cAlias := GetNextAlias()
+    Local aContas := {}
+    Local oConta := Nil
+    Local oJson := JsonObject():New()
+    Local cCodigo := ""
+    Local cAgencia := ""
+
+    oJson := JsonObject():New()
+    oJson:FromJson(oBody)  
+    cCodigo := oJson["banco"]
+    cAgencia := oJson["agencia"]
+
+    If Empty(cCodigo)
+        oJsonResponse["success"] := .F.
+        oJsonResponse["message"] := "Código do banco é obrigatório"
+        oJsonResponse["total"] := 0
+        oJsonResponse["contas"] := {}
+        Return oJsonResponse
+    EndIf
+    
+    If Empty(cAgencia)
+        oJsonResponse["success"] := .F.
+        oJsonResponse["message"] := "Código da agência é obrigatório"
+        oJsonResponse["total"] := 0
+        oJsonResponse["contas"] := {}
+        Return oJsonResponse
+    EndIf
+    
+    cQuery := "SELECT DISTINCT "
+    cQuery += "    A6_COD AS CODIGO_BANCO, "
+    cQuery += "    A6_AGENCIA AS AGENCIA, "
+    cQuery += "    A6_NUMCON AS CONTA "
+    cQuery += "FROM " + RetSqlName("SA6") + " "
+    cQuery += "WHERE D_E_L_E_T_ = ' ' "
+    cQuery += "  AND A6_COD = '" + AllTrim(cCodigo) + "' "
+    cQuery += "  AND A6_AGENCIA = '" + AllTrim(cAgencia) + "' "
+    cQuery += "ORDER BY A6_NUMCON "
+    
+    cQuery := ChangeQuery(cQuery)
+    dbUseArea(.T., "TOPCONN", TCGenQry(,, cQuery), cAlias, .F., .T.)
+    
+    If (cAlias)->(Eof())
+        oJsonResponse["success"] := .F.
+        oJsonResponse["message"] := "Nenhuma conta encontrada para o banco: " + AllTrim(cCodigo) + " agência: " + AllTrim(cAgencia)
+        oJsonResponse["total"] := 0
+        oJsonResponse["contas"] := {}
+        (cAlias)->(dbCloseArea())
+        Return oJsonResponse
+    EndIf
+    
+    (cAlias)->(dbGoTop())
+    While !(cAlias)->(Eof())
+        
+        oConta := JsonObject():New()
+        oConta["A6_COD"] := AllTrim((cAlias)->CODIGO_BANCO)
+        oConta["A6_AGENCIA"] := AllTrim((cAlias)->AGENCIA)
+        oConta["A6_NUMCON"] := AllTrim((cAlias)->CONTA)
+        
+        AAdd(aContas, oConta)
+        
+        (cAlias)->(dbSkip())
+    EndDo
+    
+    (cAlias)->(dbCloseArea())
+    
+    oJsonResponse["success"] := .T.
+    oJsonResponse["message"] := "Contas obtidas com sucesso"
+    oJsonResponse["total"] := Len(aContas)
+    oJsonResponse["banco"] := AllTrim(cCodigo)
+    oJsonResponse["agencia"] := AllTrim(cAgencia)
+    oJsonResponse["contas"] := aContas
     
 Return oJsonResponse
