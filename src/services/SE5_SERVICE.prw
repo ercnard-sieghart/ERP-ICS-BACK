@@ -194,16 +194,23 @@ Method GetAgencias(oBody) Class SE5Service as json
     Local oAgencia := Nil
     Local oJson := JsonObject():New()
     Local cCodigo := ""
+    Local cAgencia := ""
 
     oJson := JsonObject():New()
     oJson:FromJson(oBody)  
-    cCodigo := oJson["id"]
+    cCodigo := oJson["banco"]
+    cAgencia := oJson["agencia"]
 
     If Empty(cCodigo)
         oJsonResponse["success"] := .F.
         oJsonResponse["message"] := "Código do banco é obrigatório"
         oJsonResponse["total"] := 0
         oJsonResponse["agencias"] := {}
+        Return oJsonResponse
+    EndIf
+
+    If !Empty(cAgencia)
+        oJsonResponse := SE5Service():GetContas(oBody)
         Return oJsonResponse
     EndIf
     
@@ -220,7 +227,7 @@ Method GetAgencias(oBody) Class SE5Service as json
     
     If (cAlias)->(Eof())
         oJsonResponse["success"] := .F.
-        oJsonResponse["message"] := "Nenhuma agência encontrada para o banco: " + AllTrim(cBanco)
+        oJsonResponse["message"] := "Nenhuma agência encontrada para o banco: " + AllTrim(cCodigo)
         oJsonResponse["total"] := 0
         oJsonResponse["agencias"] := {}
         (cAlias)->(dbCloseArea())
@@ -263,17 +270,9 @@ Method GetContas(oBody) Class SE5Service as json
     cCodigo := oJson["banco"]
     cAgencia := oJson["agencia"]
 
-    If Empty(cCodigo)
+    If Empty(cCodigo) .AND. Empty(cAgencia)
         oJsonResponse["success"] := .F.
-        oJsonResponse["message"] := "Código do banco é obrigatório"
-        oJsonResponse["total"] := 0
-        oJsonResponse["contas"] := {}
-        Return oJsonResponse
-    EndIf
-    
-    If Empty(cAgencia)
-        oJsonResponse["success"] := .F.
-        oJsonResponse["message"] := "Código da agência é obrigatório"
+        oJsonResponse["message"] := "Código do banco e da agência são obrigatórios"
         oJsonResponse["total"] := 0
         oJsonResponse["contas"] := {}
         Return oJsonResponse
@@ -305,9 +304,8 @@ Method GetContas(oBody) Class SE5Service as json
     While !(cAlias)->(Eof())
         
         oConta := JsonObject():New()
-        oConta["A6_COD"] := AllTrim((cAlias)->CODIGO_BANCO)
-        oConta["A6_AGENCIA"] := AllTrim((cAlias)->AGENCIA)
-        oConta["A6_NUMCON"] := AllTrim((cAlias)->CONTA)
+
+        oConta["contas"] := AllTrim((cAlias)->CONTA)
         
         AAdd(aContas, oConta)
         
