@@ -10,7 +10,7 @@ Class SE5Service
     Static Method GetContas(cCodigo, cAgencia) as json
 EndClass
 
-Method GetExtratoBancario(oParams) Class SE5Service as json
+Method GetExtratoBancario(oBody) Class SE5Service as json
     Local oJsonResponse := JsonObject():New()
     Local cQuery := ""
     Local cAlias := GetNextAlias()
@@ -19,8 +19,18 @@ Method GetExtratoBancario(oParams) Class SE5Service as json
     Local nTotalEntrada := 0
     Local nTotalSaida := 0
     Local nSaldo := 0
+    Local oJson   := JsonObject():New()
+    Local oParams := JsonObject():New()
     
-    // Monta a query do extrato bancário
+    oJson:FromJson(oBody)  
+    oParams["filial"]   := AllTrim(oJson["filial"])
+    oParams["banco"]    := AllTrim(oJson["banco"])
+    oParams["agencia"]  := AllTrim(oJson["agencia"])
+    oParams["conta"]    := AllTrim(oJson["conta"])
+    oParams["dataInicio"] := AllTrim(oJson["dataInicio"])
+    oParams["dataFim"]   := AllTrim(oJson["dataFim"])
+
+
     cQuery := "SELECT "
     cQuery += "    M.E5_FILIAL   AS FILIAL, "
     cQuery += "    M.E5_BANCO    AS BANCO, "
@@ -46,37 +56,11 @@ Method GetExtratoBancario(oParams) Class SE5Service as json
     cQuery += "   AND B.D_E_L_E_T_ = ' ' "
     cQuery += "WHERE "
     cQuery += "    M.D_E_L_E_T_ = ' ' "
-    
-    // Filtros dos parâmetros
-    If !Empty(oParams["filial"])
-        cQuery += "    AND M.E5_FILIAL = '" + oParams["filial"] + "' "
-    EndIf
-    
-    If !Empty(oParams["banco"])
-        cQuery += "    AND M.E5_BANCO = '" + oParams["banco"] + "' "
-    EndIf
-    
-    If !Empty(oParams["agencia"])
-        cQuery += "    AND M.E5_AGENCIA = '" + oParams["agencia"] + "' "
-    EndIf
-    
-    If !Empty(oParams["conta"])
-        cQuery += "    AND M.E5_CONTA = '" + oParams["conta"] + "' "
-    EndIf
-    
-    If !Empty(oParams["dataInicio"]) .And. !Empty(oParams["dataFim"])
-        cQuery += "    AND M.E5_DATA BETWEEN '" + oParams["dataInicio"] + "' AND '" + oParams["dataFim"] + "' "
-    EndIf
-    
-    // Filtros opcionais
-    If !Empty(oParams["natureza"])
-        cQuery += "    AND M.E5_NATUREZ = '" + oParams["natureza"] + "' "
-    EndIf
-    
-    If !Empty(oParams["tipoDoc"])
-        cQuery += "    AND M.E5_TIPODOC = '" + oParams["tipoDoc"] + "' "
-    EndIf
-    
+    cQuery += "    AND M.E5_FILIAL = '" + oParams["filial"] + "' "
+    cQuery += "    AND M.E5_BANCO = '" + oParams["banco"] + "' "
+    cQuery += "    AND M.E5_AGENCIA = '" + oParams["agencia"] + "' "
+    cQuery += "    AND M.E5_CONTA = '" + oParams["conta"] + "' "
+    cQuery += "    AND M.E5_DATA BETWEEN '" + oParams["dataInicio"] + "' AND '" + oParams["dataFim"] + "' "
     cQuery += "ORDER BY M.E5_FILIAL, M.E5_BANCO, M.E5_AGENCIA, M.E5_CONTA, M.E5_DATA, M.E5_DOCUMEN "
     
     cQuery := ChangeQuery(cQuery)

@@ -16,8 +16,12 @@ END WSRESTFUL
 
 WSMETHOD POST WSRECEIVE RECEIVE WSSERVICE EXTRATOBANCARIO
     Local oResponse := JsonObject():New()
+    Local oBody  := JsonObject():New()
+
+    ::SetContentType("application/json")
+    oBody := ::GetContent()
     
-    oResponse := SE5Service():GetExtratoBancario()
+    oResponse := SE5Service():GetExtratoBancario(oBody)
     
     oRest:SetResponse(oResponse:toJson())
 
@@ -25,7 +29,11 @@ Return
 
 WSMETHOD GET WSRECEIVE RECEIVE WSSERVICE EXTRATOBANCARIO
     Local oResponse := JsonObject():New()
+    Local oBody  := JsonObject():New()
 
+    ::SetContentType("application/json")
+    oBody := ::GetContent()
+    
     oResponse := SE5Service():GetBancos()
     
     oRest:SetResponse(oResponse:toJson())
