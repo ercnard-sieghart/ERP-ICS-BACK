@@ -25,7 +25,7 @@ WSMETHOD GET WSRECEIVE RECEIVE WSSERVICE PATENTES
     
     oRest:SetResponse(oResponse:toJson())
 
-Return .T.
+Return
 
 WSMETHOD GET ACESSOS WSRECEIVE RECEIVE WSSERVICE PATENTES
     Local oResponse := JsonObject():New()
@@ -40,14 +40,14 @@ WSMETHOD GET ACESSOS WSRECEIVE RECEIVE WSSERVICE PATENTES
         oResponse["success"] := .F.
         oResponse["message"] := "Código da patente é obrigatório"
     oRest:SetResponse(oResponse:toJson())
-        Return .T.
+        Return
     EndIf
     
     oResponse := PatenteService():GetAcessosPatente(cPatente)
     
     oRest:SetResponse(oResponse:toJson())
 
-Return .T.
+Return
 
 WSMETHOD GET MENUS WSRECEIVE RECEIVE WSSERVICE PATENTES
     Local oResponse := JsonObject():New()
@@ -58,7 +58,7 @@ WSMETHOD GET MENUS WSRECEIVE RECEIVE WSSERVICE PATENTES
     
     oRest:SetResponse(oResponse:toJson())
 
-Return .T.
+Return
 
 WSMETHOD POST VALIDAR WSRECEIVE RECEIVE WSSERVICE PATENTES
     Local oResponse := JsonObject():New()
@@ -71,14 +71,14 @@ WSMETHOD POST VALIDAR WSRECEIVE RECEIVE WSSERVICE PATENTES
         oResponse["success"] := .F.
         oResponse["message"] := "Usuário e menu são obrigatórios"
     oRest:SetResponse(oResponse:toJson())
-        Return .T.
+        Return
     EndIf
     
     oResponse := PatenteService():ValidarAcesso(oBody)
     
     oRest:SetResponse(oResponse:toJson())
 
-Return .T.
+Return
 
 WSMETHOD POST ROTAS WSRECEIVE RECEIVE WSSERVICE PATENTES
     Local oResponse := JsonObject():New()
@@ -91,11 +91,11 @@ WSMETHOD POST ROTAS WSRECEIVE RECEIVE WSSERVICE PATENTES
         oResponse["success"] := .F.
         oResponse["message"] := "Código do usuário é obrigatório"
     oRest:SetResponse(oResponse:toJson())
-        Return .T.
+        Return
     EndIf
     
     oResponse := PatenteService():GetRotasUsuario(oBody)
     
     oRest:SetResponse(oResponse:toJson())
 
-Return .T.
+Return
