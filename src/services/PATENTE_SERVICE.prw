@@ -247,15 +247,15 @@ Method GetRotasUsuario(oBody) Class PatenteService as json
     Local cQueryCheck := ""
 
     oJson:FromJson(oBody)
-    cUsuario := AllTrim(oJson["usuario"])
 
-    If Empty(cUsuario)
+	If Empty(oBody) .Or. Empty(oJson["usuario"])
         oJsonResponse["success"] := .F.
         oJsonResponse["message"] := "Código do usuário é obrigatório"
         Return oJsonResponse
     EndIf
 
-    // Verifica se usuário tem acesso total (patente com menu 999999)
+    cUsuario := AllTrim(oJson["usuario"])
+
     cQueryCheck := "SELECT 1 FROM " + RetSqlName("SZD") + " D "
     cQueryCheck += "INNER JOIN " + RetSqlName("SZB") + " B ON B.ZB_COD = D.ZD_PATENTE AND B.D_E_L_E_T_ = ' ' AND B.ZB_MSBLQL <> '1' "
     cQueryCheck += "WHERE D.D_E_L_E_T_ = ' ' "

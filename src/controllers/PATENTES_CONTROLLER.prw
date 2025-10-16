@@ -87,13 +87,6 @@ WSMETHOD POST ROTAS WSRECEIVE RECEIVE WSSERVICE PATENTES
     ::SetContentType("application/json")
     oBody := ::GetContent()
     
-    If Empty(oBody) .Or. Empty(oBody["usuario"])
-        oResponse["success"] := .F.
-        oResponse["message"] := "Código do usuário é obrigatório"
-    oRest:SetResponse(oResponse:toJson())
-        Return
-    EndIf
-    
     oResponse := PatenteService():GetRotasUsuario(oBody)
     
     oRest:SetResponse(oResponse:toJson())
