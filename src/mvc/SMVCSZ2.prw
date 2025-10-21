@@ -2,7 +2,7 @@
 #INCLUDE "Parmtype.ch"
 #INCLUDE "FWMVCDef.ch"
 
-User Function MVCSZ2()
+User Function SMVCSZ2()
 
 	Local aArea := GetArea()
 	Local oBrowse := FwMBrowse():New()
@@ -33,7 +33,7 @@ Static Function ModelDef()
 	Local oStSZ2 := FWFormStruct(1,"SZ2")
 	
 	//Instanciando o modelo de dados
-	oModel := MPFormModel():New("ZMODELSZ2", , , ,)
+	oModel := MPFormModel():New("MVCSZ2", , , ,)
 	//Atribuindo formulario para o modelo de dados.
 	oModel:AddFields("FORMSZ2",,oStSZ2)
 	//chave primaria da rotina
