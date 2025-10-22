@@ -129,6 +129,7 @@ Method RetornaMenus() Class PatenteService as json
         (cAlias)->(dbCloseArea())
 
         oJsonResponse["success"] := .T.
+        oJsonResponse["all_menus"] := .T.
         oJsonResponse["menus"] := aMenus
 
         Return oJsonResponse
