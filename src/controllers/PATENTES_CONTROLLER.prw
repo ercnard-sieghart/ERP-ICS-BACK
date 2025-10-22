@@ -8,10 +8,9 @@ Return
 WSRESTFUL PATENTES DESCRIPTION "Webservice para gerenciamento de patentes e menus"
 
     WSMETHOD GET           DESCRIPTION "Retorna lista de todas as patentes"          WSSYNTAX ""
-    WSMETHOD GET ACESSOS   DESCRIPTION "Retorna acessos de uma patente específica"   WSSYNTAX "/acessos/{patente}" PATH "/acessos"
-    WSMETHOD GET MENUS     DESCRIPTION "Retorna lista de todos os menus"            WSSYNTAX "/menus" PATH "/menus"
-    WSMETHOD POST VALIDAR  DESCRIPTION "Valida acesso de usuário a menu"            WSSYNTAX "/validar" PATH "/validar"
-    WSMETHOD POST ROTAS    DESCRIPTION "Retorna rotas/menus do usuário logado"      WSSYNTAX "/rotas" PATH "/rotas"
+    WSMETHOD GET ACESSOS   DESCRIPTION "Retorna acessos de uma patente específica"   WSSYNTAX "/acessos/{patente}"                            PATH "/acessos"
+    WSMETHOD GET MENUS     DESCRIPTION "Retorna lista dos menus liberados"             WSSYNTAX "/menus" PATH "/menus"
+    WSMETHOD GET VALIDAR   DESCRIPTION "Valida acesso de usuário a menu"             WSSYNTAX "/validar" PATH "/validar"    WSSYNTAX "/rotas" PATH "/rotas"
 
 END WSRESTFUL
 
@@ -39,7 +38,7 @@ WSMETHOD GET ACESSOS WSRECEIVE RECEIVE WSSERVICE PATENTES
     If Empty(cPatente)
         oResponse["success"] := .F.
         oResponse["message"] := "Código da patente é obrigatório"
-    oRest:SetResponse(oResponse:toJson())
+        oRest:SetResponse(oResponse:toJson())
         Return
     EndIf
     
@@ -54,13 +53,13 @@ WSMETHOD GET MENUS WSRECEIVE RECEIVE WSSERVICE PATENTES
 
     ::SetContentType("application/json")
     
-    oResponse := PatenteService():GetAllMenus()
+    oResponse := PatenteService():RetornaMenus()
     
     oRest:SetResponse(oResponse:toJson())
 
 Return
 
-WSMETHOD POST VALIDAR WSRECEIVE RECEIVE WSSERVICE PATENTES
+WSMETHOD GET VALIDAR WSRECEIVE RECEIVE WSSERVICE PATENTES
     Local oResponse := JsonObject():New()
     Local oBody := JsonObject():New()
 
@@ -74,20 +73,7 @@ WSMETHOD POST VALIDAR WSRECEIVE RECEIVE WSSERVICE PATENTES
         Return
     EndIf
     
-    oResponse := PatenteService():ValidarAcesso(oBody)
-    
-    oRest:SetResponse(oResponse:toJson())
-
-Return
-
-WSMETHOD POST ROTAS WSRECEIVE RECEIVE WSSERVICE PATENTES
-    Local oResponse := JsonObject():New()
-    Local oBody := JsonObject():New()
-
-    ::SetContentType("application/json")
-    oBody := ::GetContent()
-    
-    oResponse := PatenteService():GetRotasUsuario(oBody)
+    oResponse := PatenteService():VerificaAcessoMenu(oBody)
     
     oRest:SetResponse(oResponse:toJson())
 
