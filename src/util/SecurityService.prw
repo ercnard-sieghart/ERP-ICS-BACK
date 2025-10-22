@@ -2,22 +2,22 @@
 
 Class SecurityService
 	Data cID As Char
-	Static Method New() As Char
+	Method New() As Object
     Static Method IsAdmin() As Logical
     Static Method HasFullAccess() As Logical
 EndClass
 
-Static Method New() Class SecurityService  
+Static Method New() Class SecurityService As Object
 	
 	Self:cID := __cUserID
 
 Return Self
 
-Method IsAdmin() Class SecurityService
-    Return FWIsAdmin(cID)
+Method IsAdmin() Class SecurityService As Logical
+    Return FWIsAdmin()
 Return
 
-Method HasFullAccess() Class SecurityService
+Method HasFullAccess() Class SecurityService As Logical
     Local cQuery := ""
     Local cAlias := GetNextAlias()
     Local lFull := .F.

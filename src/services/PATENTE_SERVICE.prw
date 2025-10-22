@@ -105,15 +105,12 @@ Method RetornaMenus() Class PatenteService as json
 
     If oSecurity:IsAdmin() .Or. oSecurity:HasFullAccess()
         cQuery := "SELECT "
-        cQuery += "    ZC_COD    AS CODIGO, "
-        cQuery += "    ZC_DESCRI AS DESCRICAO, "
-        cQuery += "    ZC_ROTA   AS ROTA, "
-        cQuery += "    ZC_ICONE  AS ICONE, "
-        cQuery += "    ZC_ORDEM  AS ORDEM "
-        cQuery += "FROM " + RetSqlName("SZC") + " "
+        cQuery += "    ZC_MENU  AS MENU, "
+        cQuery += "    ZC_DESC  AS DESCRICAO, "
+        cQuery += "    ZC_ROTA  AS ROTA "
+        cQuery += "FROM " + RetSqlName("SZC990") + " "
         cQuery += "WHERE D_E_L_E_T_ = ' ' "
-        cQuery += "  AND ZC_MSBLQL <> '1' "
-        cQuery += "ORDER BY ZC_ORDEM, ZC_COD "
+        cQuery += "ORDER BY r_e_c_n_o_, ZC_ID "
 
         cQuery := ChangeQuery(cQuery)
 
@@ -121,11 +118,9 @@ Method RetornaMenus() Class PatenteService as json
 
         While !(cAlias)->(Eof())
             oMenu := JsonObject():New()
-            oMenu["codigo"] := AllTrim((cAlias)->CODIGO)
+            oMenu["menu"]      := AllTrim((cAlias)->MENU)
             oMenu["descricao"] := AllTrim((cAlias)->DESCRICAO)
-            oMenu["rota"] := AllTrim((cAlias)->ROTA)
-            oMenu["icone"] := AllTrim((cAlias)->ICONE)
-            oMenu["ordem"] := Val((cAlias)->ORDEM)
+            oMenu["rota"]      := AllTrim((cAlias)->ROTA)
 
             aAdd(aMenus, oMenu)
             (cAlias)->(dbSkip())

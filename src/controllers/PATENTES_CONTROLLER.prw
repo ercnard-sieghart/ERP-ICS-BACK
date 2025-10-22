@@ -9,7 +9,7 @@ WSRESTFUL PATENTES DESCRIPTION "Webservice para gerenciamento de patentes e menu
 
     WSMETHOD GET           DESCRIPTION "Retorna lista de todas as patentes"          WSSYNTAX ""
     WSMETHOD GET ACESSOS   DESCRIPTION "Retorna acessos de uma patente específica"   WSSYNTAX "/acessos/{patente}"                            PATH "/acessos"
-    WSMETHOD GET MENUS     DESCRIPTION "Retorna lista dos menus liberados"             WSSYNTAX "/menus" PATH "/menus"
+    WSMETHOD GET MENUS     DESCRIPTION "Retorna lista dos menus liberados"           WSSYNTAX "/menus" PATH "/menus"
     WSMETHOD GET VALIDAR   DESCRIPTION "Valida acesso de usuário a menu"             WSSYNTAX "/validar" PATH "/validar"    WSSYNTAX "/rotas" PATH "/rotas"
 
 END WSRESTFUL
