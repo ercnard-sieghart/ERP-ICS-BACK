@@ -152,62 +152,62 @@ Return oJsonResponse
 
 Method VerificaAcessoMenu(oBody) Class PatenteService as json
     Local oJsonResponse := JsonObject():New()
-    Local oJson := JsonObject():New()
-    Local cUsuario := ""
-    Local cMenu := ""
-    Local lTemAcesso := .F.
+    Local oSecurity := SecurityService():New()
+    Local aPatentesUsr := {}
+    Local lAcesso := .F.
+    Local cIDMenu := ""
     Local cQuery := ""
     Local cAlias := GetNextAlias()
-    Local oSecurity := SecurityService():New()
-
-    // Recebe e valida o body
-    If Empty(oBody)
-        oJsonResponse["success"] := .F.
-        oJsonResponse["message"] := "Body é obrigatório"
-        Return oJsonResponse
-    EndIf
-
-    oJson:FromJson(oBody)
-
-    cUsuario := AllTrim(oJson["usuario"]) // usuário a verificar
-    cMenu := AllTrim(oJson["menu"])       // código/rota do menu
-
-    If Empty(cUsuario) .Or. Empty(cMenu)
-        oJsonResponse["success"] := .F.
-        oJsonResponse["message"] := "Usuário e menu são obrigatórios"
-        Return oJsonResponse
-    EndIf
-
-    // Se o usuário é admin ou tem acesso total, retorna acesso positivo
+    Local cIn := ""
+    Local i := 0
+    
     If oSecurity:IsAdmin() .Or. oSecurity:HasFullAccess()
-        oJsonResponse["success"] := .T.
-        oJsonResponse["hasAccess"] := .T.
+        oJsonResponse["message"] := "Acesso autorizado"
+        oJsonResponse["acess"] := .T.
         Return oJsonResponse
     EndIf
 
-    // Verifica via query EXISTS se o usuário (ou grupos/função) possui acesso ao menu
-    cQuery := "SELECT 1 FROM " + RetSqlName("SZD") + " D "
-    cQuery += " INNER JOIN " + RetSqlName("SZB") + " B ON B.ZB_COD = D.ZD_PATENTE AND B.D_E_L_E_T_ = ' ' AND B.ZB_MSBLQL <> '1' "
-    cQuery += " WHERE D.D_E_L_E_T_ = ' ' "
-    cQuery += "   AND D.ZD_MENU = " + ValToSQL(cMenu)
-    cQuery += "   AND D.ZD_ACESSO = '1' "
-    cQuery += "   AND ( D.ZD_PATENTE = " + ValToSQL(cUsuario)
-    cQuery += "       OR D.ZD_PATENTE IN (SELECT USR_GRUPO FROM " + RetSqlName("SYS_USR_GROUPS") + " WHERE D_E_L_E_T_ = ' ' AND USR_ID = " + ValToSQL(cUsuario) + ")"
-    cQuery += "       OR D.ZD_PATENTE = (SELECT USR_FUNCAO FROM " + RetSqlName("SYS_USUARIO") + " WHERE D_E_L_E_T_ = ' ' AND USR_ID = " + ValToSQL(cUsuario) + ") )"
+    aPatentesUsr := PatentesUsr()
 
-    cQuery := ChangeQuery(cQuery)
-    dbUseArea(.T., "TOPCONN", TCGenQry(,, cQuery), cAlias, .F., .T.)
-    If !(cAlias)->(Eof())
-        lTemAcesso := .T.
-    EndIf
-    (cAlias)->(dbCloseArea())
+    If !Empty(oBody)
+        cIDMenu := AllTrim(oBody:ID)
 
-    oJsonResponse["success"] := .T.
-    oJsonResponse["hasAccess"] := lTemAcesso
-    If .T. == lTemAcesso
-        oJsonResponse["message"] := "Usuário tem acesso ao menu"
+        For i := 1 To Len(aPatentesUsr)
+            cIn += ValToSQL(AllTrim(aPatentesUsr[i])) + ","
+        Next
+
+        If Len(cIn) == 0
+            oJsonResponse["message"] := "Acesso negado"
+            oJsonResponse["acess"] :=  lAcesso
+            Return oJsonResponse
+        EndIf
+
+        cIn := SubStr(cIn, 1, Len(cIn) - 1)
+
+        cQuery := "SELECT ZD_PATENTE FROM " + RetSqlName("SZD") + " "
+        cQuery += "WHERE D_E_L_E_T_ = ' ' AND ZD_MENU = " + ValToSQL(AllTrim(cIDMenu)) + " AND ZD_PATENTE IN (" + cIn + ") "
+
+        cQuery := ChangeQuery(cQuery)
+
+        dbUseArea(.T., "TOPCONN", TCGenQry(,, cQuery), cAlias, .F., .T.)
+
+        If !(cAlias)->(Eof())
+            lAcesso := .T.
+        EndIf
+
+        If lAcesso == .T.
+            oJsonResponse["message"] := "Acesso autorizado"
+            oJsonResponse["acess"] := lAcesso
+        Else
+            oJsonResponse["message"] := "Acesso negado"
+            oJsonResponse["acess"] := lAcesso
+        EndIf
+
+        (cAlias)->(dbCloseArea())
+
     Else
-        oJsonResponse["message"] := "Usuário não possui acesso ao menu"
+        oJsonResponse["message"] := "ID do menu é obrigatório"
+        oJsonResponse["acess"] := lAcesso
     EndIf
 
 Return oJsonResponse
@@ -275,6 +275,7 @@ Static Function Rotas(aMenus)
     Local cAlias := GetNextAlias()
     Local i := 0
     Local cIn := ""
+    Local oMenu 
 
     If ValType(aMenus) <> "A" .Or. Len(aMenus) == 0
         Return aRotas
@@ -289,18 +290,21 @@ Static Function Rotas(aMenus)
     EndIf
     cIn := SubStr(cIn, 1, Len(cIn) - 1)
 
-    cQuery := "SELECT ZC_MENU, ZC_ROTA, ZC_DESC FROM " + RetSqlName("SZC") + " "
+    cQuery := "SELECT ZC_ID, ZC_MENU, ZC_ROTA FROM " + RetSqlName("SZC") + " "
     cQuery += "WHERE D_E_L_E_T_ = ' ' AND ZC_ID IN (" + cIn + ") "
     
     cQuery := ChangeQuery(cQuery)
 
     dbUseArea(.T., "TOPCONN", TCGenQry(,, cQuery), cAlias, .F., .T.)
     While !(cAlias)->(Eof())
-        aAdd(aRotas, AllTrim((cAlias)->ZC_MENU))
-        aAdd(aRotas, AllTrim((cAlias)->ZC_DESC))
-        aAdd(aRotas, AllTrim((cAlias)->ZC_ROTA))
+        oMenu := JsonObject():New()
+        oMenu["id"]        := AllTrim((cAlias)->ZC_ID)
+        oMenu["menu"]      := AllTrim((cAlias)->ZC_MENU)
+        oMenu["rota"]      := AllTrim((cAlias)->ZC_ROTA)
+
+        aAdd(aRotas, oMenu)
         (cAlias)->(dbSkip())
     EndDo
     (cAlias)->(dbCloseArea())
 
-Return aRotas   
+Return aRotas

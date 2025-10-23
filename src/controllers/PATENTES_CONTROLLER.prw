@@ -7,11 +7,10 @@ Return
 
 WSRESTFUL PATENTES DESCRIPTION "Webservice para gerenciamento de patentes e menus"
 
-    WSMETHOD GET           DESCRIPTION "Retorna lista de todas as patentes"          WSSYNTAX ""
-    WSMETHOD GET ACESSOS   DESCRIPTION "Retorna acessos de uma patente específica"   WSSYNTAX "/acessos/{patente}"                            PATH "/acessos"
-    WSMETHOD GET MENUS     DESCRIPTION "Retorna lista dos menus liberados"           WSSYNTAX "/menus" PATH "/menus"
-    WSMETHOD GET VALIDAR   DESCRIPTION "Valida acesso de usuário a menu"             WSSYNTAX "/validar" PATH "/validar"    WSSYNTAX "/rotas" PATH "/rotas"
-
+    WSMETHOD GET            DESCRIPTION "Retorna lista de todas as patentes"          WSSYNTAX ""
+    WSMETHOD GET  ACESSOS   DESCRIPTION "Retorna acessos de uma patente específica"   WSSYNTAX "/acessos/{patente}"                  PATH "/acessos"
+    WSMETHOD GET  MENUS     DESCRIPTION "Retorna lista dos menus liberados"           WSSYNTAX "/menus"                              PATH "/menus"
+    WSMETHOD POST VALIDAR   DESCRIPTION "Valida acesso de usuário a menu"             WSSYNTAX "/validar"                            PATH "/validar"                        
 END WSRESTFUL
 
 
@@ -32,7 +31,6 @@ WSMETHOD GET ACESSOS WSRECEIVE RECEIVE WSSERVICE PATENTES
 
     ::SetContentType("application/json")
     
-    // Pega o parâmetro da URL (patente)
     cPatente := ::aURLParms[1]
     
     If Empty(cPatente)
@@ -59,20 +57,13 @@ WSMETHOD GET MENUS WSRECEIVE RECEIVE WSSERVICE PATENTES
 
 Return
 
-WSMETHOD GET VALIDAR WSRECEIVE RECEIVE WSSERVICE PATENTES
+WSMETHOD POST VALIDAR WSRECEIVE RECEIVE WSSERVICE PATENTES
     Local oResponse := JsonObject():New()
     Local oBody := JsonObject():New()
 
     ::SetContentType("application/json")
-    oBody := ::GetContent()
-    
-    If Empty(oBody) .Or. Empty(oBody["usuario"]) .Or. Empty(oBody["menu"])
-        oResponse["success"] := .F.
-        oResponse["message"] := "Usuário e menu são obrigatórios"
-    oRest:SetResponse(oResponse:toJson())
-        Return
-    EndIf
-    
+    FwJSONDeserialize(::GetContent(), @oBody )
+
     oResponse := PatenteService():VerificaAcessoMenu(oBody)
     
     oRest:SetResponse(oResponse:toJson())

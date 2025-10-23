@@ -105,36 +105,26 @@ VALUES ('000003', '000004', '000004', 'Analista Consultas', ' ', 18);
 -- VERIFICAÇÃO DOS DADOS INSERIDOS (EXECUTAR APÓS OS INSERTS!)
 -- ==================================================
 
--- Contar registros inseridos
-SELECT 'MENUS INSERIDOS: ' AS TIPO, COUNT(*) AS TOTAL FROM SZC990;
-SELECT 'PATENTES INSERIDAS: ' AS TIPO, COUNT(*) AS TOTAL FROM SZB990;
-SELECT 'RELACIONAMENTOS INSERIDOS: ' AS TIPO, COUNT(*) AS TOTAL FROM SZD990;
+-- TABELA SZB - PATENTES_USUARIOS
+SELECT * FROM 	SZE990
 
--- Verificar Menus
-SELECT ZC_ID, ZC_MENU, ZC_DESC, ZC_ROTA 
-FROM SZC990 
-ORDER BY ZC_ID;
+-- TABELA SZB - PATENTES
+SELECT * FROM 	SZB990
 
--- Verificar Patentes
-SELECT ZB_ID, ZB_NOME, ZB_DESC 
-FROM SZB990 
-ORDER BY ZB_ID;
+-- TABELA SZD - PATENTE_MENUS 
+SELECT * FROM  SZD990 
 
--- Verificar Relacionamentos Simplificados
--- Primeiro teste: ver os dados brutos
-SELECT * FROM SZD990;
-SELECT * FROM SZB990 LIMIT 3;
-SELECT * FROM SZC990 LIMIT 3;
+-- TABELA SZC - MENUS
+SELECT * FROM  	SZC990 
 
--- Query com conversão INTEGER limpa
-SELECT 
-    P.ZB_NOME AS PATENTE,
-    CASE 
-        WHEN R.ZD_MENU::integer = 999999 THEN 'ACESSO TOTAL'
-        ELSE M.ZC_MENU 
-    END AS ACESSO
-FROM SZD990 R
-INNER JOIN SZB990 P ON P.ZB_ID::integer = R.ZD_PATENTE::integer
-LEFT JOIN SZC990 M ON M.ZC_ID::integer = R.ZD_MENU::integer 
-    AND R.ZD_MENU::integer != 999999
-ORDER BY P.ZB_NOME;
+
+-- VERIFICA SE O CÓD DO USUARIO POSSUI ALGUMA PATENTE
+SELECT ZE_PATENTE FROM SZE990 D WHERE  D_E_L_E_T_ = ' ' AND D.ZE_USR = '000000'
+
+-- SE FOR ADMINISTRATOR OU POSSUIR A PATENTE 101 RETORNAR TODOS OS MENUS
+localhost:8181/rest/patentes/menus
+{"success":true,"all_menus":true,"menus":[{"menu":"Home","descricao":"P�gina inicial do sistema","rota":"/home"},{"menu":"Dashboard","descricao":"Painel Dashboard","rota":"/dashboard"},{"menu":"SC de Compras","descricao":"Gerenciar solicita��es","rota":"/compras/solicitacao"},{"menu":"Consultas","descricao":"Menu principal de consultas","rota":"/consultas"},{"menu":"Extrato Banc�rio","descricao":"Consulta de extrato banc�rio","rota":"/consultas/extrato-bancario"},{"menu":"Relat�rios","descricao":"Consulta de relat�rios","rota":"/consultas/consulta-relatorio"},{"menu":"Or�amentos","descricao":"Gerenciamento de or�amentos","rota":"/orcamentos"},{"menu":"Detalhe Item","descricao":"Visualiza��o detalhada de itens","rota":"/detalhe-item"},{"menu":"Patentes","descricao":"Administra��o de patentes","rota":"/admin/patentes"}]}
+
+-- SE NÃO FOR ADM/101 VERIFICA AS PATENTES DO USUARIO
+
+SELECT ZC_MENU,ZC_ROTA,ZC_DESC FROM SZC990 WHERE  D_E_L_E_T_ = ' ' AND ZC_ID IN ('000007','000008') 
