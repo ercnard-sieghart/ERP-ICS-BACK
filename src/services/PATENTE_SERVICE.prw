@@ -110,7 +110,7 @@ Method RetornaMenus() Class PatenteService as json
         cQuery += "    ZC_ROTA  AS ROTA "
         cQuery += "FROM " + RetSqlName("SZC990") + " "
         cQuery += "WHERE D_E_L_E_T_ = ' ' "
-        cQuery += "ORDER BY r_e_c_n_o_, ZC_ID "
+        cQuery += "ORDER BY R_E_C_N_O_, ZC_ID "
 
         cQuery := ChangeQuery(cQuery)
 
