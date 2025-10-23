@@ -98,10 +98,8 @@ Method RetornaMenus() Class PatenteService as json
     Local cAlias := GetNextAlias()
     Local aMenus := {}
     Local oMenu := Nil
-    Local cUser := AllTrim(__cUserID)
-    Local cAliasCheck := GetNextAlias()
-    Local cQueryCheck := ""
     Local oSecurity := SecurityService():New()
+    Local aPatentesUsr := {}
 
     If oSecurity:IsAdmin() .Or. oSecurity:HasFullAccess()
         cQuery := "SELECT "
@@ -134,63 +132,23 @@ Method RetornaMenus() Class PatenteService as json
 
         Return oJsonResponse
     Else
-        // Verifica se o usuário possui alguma patente na SZE
-        cQueryCheck := "SELECT 1 FROM " + RetSqlName("SZE") + " WHERE D_E_L_E_T_ = ' ' AND ZE_USR = '" + cUser + "' AND ALLTRIM(ZE_PATENTE) <> '' "
+        aPatentesUsr := PatentesUsr()
 
-        cQueryCheck := ChangeQuery(cQueryCheck)
-        dbUseArea(.T., "TOPCONN", TCGenQry(,, cQueryCheck), cAliasCheck, .F., .T.)
-
-        If (cAliasCheck)->(Eof())
-            (cAliasCheck)->(dbCloseArea())
+        If Len(aPatentesUsr) == 0
             oJsonResponse["success"] := .F.
             oJsonResponse["message"] := "Usuário não possui patentes"
             Return oJsonResponse
         EndIf
 
-        (cAliasCheck)->(dbCloseArea())
+        aMenus := MenusPorPatentes(aPatentesUsr)
 
-        // Busca menus com base nas patentes do usuário (via SZE -> ZE_PATENTE -> SZD)
-        cQuery := "SELECT DISTINCT "
-        cQuery += "    M.ZC_COD    AS CODIGO, "
-        cQuery += "    M.ZC_DESCRI AS DESCRICAO, "
-        cQuery += "    M.ZC_ROTA   AS ROTA, "
-        cQuery += "    M.ZC_ICONE  AS ICONE, "
-        cQuery += "    M.ZC_ORDEM  AS ORDEM "
-        cQuery += "FROM " + RetSqlName("SZC") + " M "
-        cQuery += "WHERE M.D_E_L_E_T_ = ' ' "
-        cQuery += "  AND M.ZC_MSBLQL <> '1' "
-        cQuery += "  AND ( UPPER(RTRIM(M.ZC_COD)) = 'HOME' OR EXISTS ( "
-        cQuery += "      SELECT 1 FROM " + RetSqlName("SZD") + " D "
-        cQuery += "      INNER JOIN " + RetSqlName("SZB") + " B ON B.ZB_COD = D.ZD_PATENTE AND B.D_E_L_E_T_ = ' ' AND B.ZB_MSBLQL <> '1' "
-        cQuery += "      INNER JOIN " + RetSqlName("SZE") + " E ON E.ZE_PATENTE = D.ZD_PATENTE AND E.D_E_L_E_T_ = ' ' AND E.ZE_USR = '" + cUser + "' "
-        cQuery += "      WHERE D.D_E_L_E_T_ = ' ' AND D.ZD_MENU = M.ZC_COD AND D.ZD_ACESSO = '1' "
-        cQuery += "  ) ) "
-        cQuery += "ORDER BY M.ZC_ORDEM, M.ZC_COD "
-
-        cQuery := ChangeQuery(cQuery)
-        dbUseArea(.T., "TOPCONN", TCGenQry(,, cQuery), cAlias, .F., .T.)
-
-        While !(cAlias)->(Eof())
-            oMenu := JsonObject():New()
-            oMenu["codigo"] := AllTrim((cAlias)->CODIGO)
-            oMenu["descricao"] := AllTrim((cAlias)->DESCRICAO)
-            oMenu["rota"] := AllTrim((cAlias)->ROTA)
-            oMenu["icone"] := AllTrim((cAlias)->ICONE)
-            oMenu["ordem"] := Val((cAlias)->ORDEM)
-
-            aAdd(aMenus, oMenu)
-            (cAlias)->(dbSkip())
-        EndDo
-
-        (cAlias)->(dbCloseArea())
+        aRotas := Rotas(aMenus)
 
         oJsonResponse["success"] := .T.
-        oJsonResponse["menus"] := aMenus
-
-        Return oJsonResponse
-    Endif
-    
-Return 
+        oJsonResponse["all_menus"] := .F.
+        oJsonResponse["menus"] := aRotas
+    EndIf
+Return oJsonResponse    
 
 Method VerificaAcessoMenu(oBody) Class PatenteService as json
     Local oJsonResponse := JsonObject():New()
@@ -253,3 +211,96 @@ Method VerificaAcessoMenu(oBody) Class PatenteService as json
     EndIf
 
 Return oJsonResponse
+
+Static Function PatentesUsr()
+    Local aPatentesUsr := {}
+    Local cQueryPat := ""
+    Local cAliasPat := GetNextAlias()
+
+    cQueryPat := "SELECT ZE_PATENTE FROM " + RetSqlName("SZE") + " WHERE D_E_L_E_T_ = ' ' AND ZE_USR = '" + __cUserID + "'"
+    cQueryPat := ChangeQuery(cQueryPat)
+
+    dbUseArea(.T., "TOPCONN", TCGenQry(,, cQueryPat), cAliasPat, .F., .T.)
+    While !(cAliasPat)->(Eof())
+        aAdd(aPatentesUsr, AllTrim((cAliasPat)->ZE_PATENTE))
+        (cAliasPat)->(dbSkip())
+    EndDo
+    (cAliasPat)->(dbCloseArea())
+
+Return aPatentesUsr
+
+Static Function MenusPorPatentes(aPatentesUsr)
+    Local aMenus := {}
+    Local cQuery := ""
+    Local cAlias := GetNextAlias()
+    Local cIn := ""
+    Local i := 0
+    Local cMenu := ""
+
+    If ValType(aPatentesUsr) <> "A" .Or. Len(aPatentesUsr) == 0
+        Return aMenus
+    EndIf
+
+    For i := 1 To Len(aPatentesUsr)
+        cIn += ValToSQL(AllTrim(aPatentesUsr[i])) + ","
+    Next
+
+    If Len(cIn) == 0
+        Return aMenus
+    EndIf
+
+    cIn := SubStr(cIn, 1, Len(cIn) - 1)
+
+    cQuery := "SELECT ZD_PATENTE, ZD_MENU, ZD_DESC FROM " + RetSqlName("SZD") + " "
+    cQuery += "WHERE D_E_L_E_T_ = ' ' AND ZD_PATENTE IN (" + cIn + ") "
+    cQuery += "ORDER BY ZD_MENU"
+
+    cQuery := ChangeQuery(cQuery)
+
+    dbUseArea(.T., "TOPCONN", TCGenQry(,, cQuery), cAlias, .F., .T.)
+    While !(cAlias)->(Eof())
+        cMenu := AllTrim((cAlias)->ZD_MENU)
+        If AScan(aMenus, cMenu) == 0
+            aAdd(aMenus, cMenu)
+        EndIf
+        (cAlias)->(dbSkip())
+    EndDo
+    (cAlias)->(dbCloseArea())
+
+Return aMenus
+
+Static Function Rotas(aMenus)
+    Local aRotas := {}
+    Local cQuery := ""
+    Local cAlias := GetNextAlias()
+    Local i := 0
+    Local cIn := ""
+
+    If ValType(aMenus) <> "A" .Or. Len(aMenus) == 0
+        Return aRotas
+    EndIf
+
+    For i := 1 To Len(aMenus)
+        cIn += ValToSQL(AllTrim(aMenus[i])) + ","
+    Next
+    
+    If Len(cIn) == 0
+        Return aRotas
+    EndIf
+    cIn := SubStr(cIn, 1, Len(cIn) - 1)
+
+    cQuery := "SELECT ZC_MENU, ZC_ROTA, ZC_DESC FROM " + RetSqlName("SZC") + " "
+    cQuery += "WHERE D_E_L_E_T_ = ' ' AND ZC_ID IN (" + cIn + ") "
+    
+    cQuery := ChangeQuery(cQuery)
+
+    dbUseArea(.T., "TOPCONN", TCGenQry(,, cQuery), cAlias, .F., .T.)
+    While !(cAlias)->(Eof())
+        aAdd(aRotas, AllTrim((cAlias)->ZC_MENU))
+        aAdd(aRotas, AllTrim((cAlias)->ZC_DESC))
+        aAdd(aRotas, AllTrim((cAlias)->ZC_ROTA))
+        (cAlias)->(dbSkip())
+    EndDo
+    (cAlias)->(dbCloseArea())
+
+Return aRotas   
